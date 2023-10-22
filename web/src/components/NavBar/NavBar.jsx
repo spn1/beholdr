@@ -21,7 +21,7 @@ export const NavBar = () => {
       <div>
         <div className="flex gap-4">
           <NavLink href="/login">Log In</NavLink>
-          <NavLink href="/spells">Sign Up</NavLink>
+          <NavLink href="/sign-up">Sign Up</NavLink>
         </div>
       </div>
     </header>

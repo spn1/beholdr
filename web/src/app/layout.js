@@ -10,7 +10,7 @@ export const metadata = {
 export default ({ children }) => {
   return (
     <html lang="en" className="dark">
-      <body className="font-sans h-screen">
+      <body className="font-sans">
         <NavBar />
         {children}
       </body>
