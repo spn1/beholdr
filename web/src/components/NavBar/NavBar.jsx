@@ -1,28 +1,25 @@
 import Link from "next/link";
-import { NavLink } from "./NavLink";
+import { NavPageLinks } from "./NavPageLinks";
+import { NavUserLinks } from "./NavUserLinks";
 
 export const NavBar = () => {
   return (
     <header className="flex flex-row font-semibold justify-between p-6 bg-red-500 items-center">
       <div className="flex">
-        <Link href="/" className="flex gap-4 px-4 border-r-4 border-black">
+        <Link
+          href="/"
+          className="flex gap-4 px-4 md:border-r-4 md:border-black"
+        >
           <img
             src="/images/bb-192x192.png"
             className="w-10 aspect-square rounded-full"
           />
-          <h4 className="text-4xl font-bold">Beholdr</h4>
+          <h4 className="text-4xl font-bold hidden md:block">Beholdr</h4>
         </Link>
-        <div className="flex gap-4 ml-4 items-center">
-          <NavLink href="/creatures">Creatures</NavLink>
-          <NavLink href="/spells">Spells</NavLink>
-          <NavLink href="/items">Items</NavLink>
-        </div>
+        <NavPageLinks />
       </div>
       <div>
-        <div className="flex gap-4">
-          <NavLink href="/login">Log In</NavLink>
-          <NavLink href="/sign-up">Sign Up</NavLink>
-        </div>
+        <NavUserLinks />
       </div>
     </header>
   );
