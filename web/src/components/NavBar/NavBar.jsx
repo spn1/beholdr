@@ -1,6 +1,5 @@
 import Link from "next/link";
 import { NavLinks } from "./NavLinks";
-import { NavUserLinks } from "./NavUserLinks";
 
 export const NavBar = () => {
   return (
