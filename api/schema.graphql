@@ -6,9 +6,8 @@ type User {
   name: String
   email: String
   password: PasswordState
-  posts(where: PostWhereInput! = {}, orderBy: [PostOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostWhereUniqueInput): [Post!]
-  postsCount(where: PostWhereInput! = {}): Int
   createdAt: DateTime
+  role: Role
 }
 
 type PasswordState {
@@ -29,8 +28,8 @@ input UserWhereInput {
   id: IDFilter
   name: StringFilter
   email: StringFilter
-  posts: PostManyRelationFilter
   createdAt: DateTimeNullableFilter
+  role: RoleWhereInput
 }
 
 input IDFilter {
@@ -55,7 +54,13 @@ input StringFilter {
   contains: String
   startsWith: String
   endsWith: String
+  mode: QueryMode
   not: NestedStringFilter
+}
+
+enum QueryMode {
+  default
+  insensitive
 }
 
 input NestedStringFilter {
@@ -70,12 +75,6 @@ input NestedStringFilter {
   startsWith: String
   endsWith: String
   not: NestedStringFilter
-}
-
-input PostManyRelationFilter {
-  every: PostWhereInput
-  some: PostWhereInput
-  none: PostWhereInput
 }
 
 input DateTimeNullableFilter {
@@ -105,15 +104,14 @@ input UserUpdateInput {
   name: String
   email: String
   password: String
-  posts: PostRelateToManyForUpdateInput
   createdAt: DateTime
+  role: RoleRelateToOneForUpdateInput
 }
 
-input PostRelateToManyForUpdateInput {
-  disconnect: [PostWhereUniqueInput!]
-  set: [PostWhereUniqueInput!]
-  create: [PostCreateInput!]
-  connect: [PostWhereUniqueInput!]
+input RoleRelateToOneForUpdateInput {
+  create: RoleCreateInput
+  connect: RoleWhereUniqueInput
+  disconnect: Boolean
 }
 
 input UserUpdateArgs {
@@ -125,133 +123,63 @@ input UserCreateInput {
   name: String
   email: String
   password: String
-  posts: PostRelateToManyForCreateInput
   createdAt: DateTime
+  role: RoleRelateToOneForCreateInput
 }
 
-input PostRelateToManyForCreateInput {
-  create: [PostCreateInput!]
-  connect: [PostWhereUniqueInput!]
+input RoleRelateToOneForCreateInput {
+  create: RoleCreateInput
+  connect: RoleWhereUniqueInput
 }
 
-type Post {
-  id: ID!
-  title: String
-  content: Post_content_Document
-  author: User
-  tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TagWhereUniqueInput): [Tag!]
-  tagsCount(where: TagWhereInput! = {}): Int
-}
-
-type Post_content_Document {
-  document(hydrateRelationships: Boolean! = false): JSON!
-}
-
-input PostWhereUniqueInput {
-  id: ID
-}
-
-input PostWhereInput {
-  AND: [PostWhereInput!]
-  OR: [PostWhereInput!]
-  NOT: [PostWhereInput!]
-  id: IDFilter
-  title: StringFilter
-  author: UserWhereInput
-  tags: TagManyRelationFilter
-}
-
-input TagManyRelationFilter {
-  every: TagWhereInput
-  some: TagWhereInput
-  none: TagWhereInput
-}
-
-input PostOrderByInput {
-  id: OrderDirection
-  title: OrderDirection
-}
-
-input PostUpdateInput {
-  title: String
-  content: JSON
-  author: UserRelateToOneForUpdateInput
-  tags: TagRelateToManyForUpdateInput
-}
-
-input UserRelateToOneForUpdateInput {
-  create: UserCreateInput
-  connect: UserWhereUniqueInput
-  disconnect: Boolean
-}
-
-input TagRelateToManyForUpdateInput {
-  disconnect: [TagWhereUniqueInput!]
-  set: [TagWhereUniqueInput!]
-  create: [TagCreateInput!]
-  connect: [TagWhereUniqueInput!]
-}
-
-input PostUpdateArgs {
-  where: PostWhereUniqueInput!
-  data: PostUpdateInput!
-}
-
-input PostCreateInput {
-  title: String
-  content: JSON
-  author: UserRelateToOneForCreateInput
-  tags: TagRelateToManyForCreateInput
-}
-
-input UserRelateToOneForCreateInput {
-  create: UserCreateInput
-  connect: UserWhereUniqueInput
-}
-
-input TagRelateToManyForCreateInput {
-  create: [TagCreateInput!]
-  connect: [TagWhereUniqueInput!]
-}
-
-type Tag {
+type Role {
   id: ID!
   name: String
-  posts(where: PostWhereInput! = {}, orderBy: [PostOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostWhereUniqueInput): [Post!]
-  postsCount(where: PostWhereInput! = {}): Int
+  canViewAllUsers: Boolean
+  canManageUsers: Boolean
 }
 
-input TagWhereUniqueInput {
+input RoleWhereUniqueInput {
   id: ID
 }
 
-input TagWhereInput {
-  AND: [TagWhereInput!]
-  OR: [TagWhereInput!]
-  NOT: [TagWhereInput!]
+input RoleWhereInput {
+  AND: [RoleWhereInput!]
+  OR: [RoleWhereInput!]
+  NOT: [RoleWhereInput!]
   id: IDFilter
   name: StringFilter
-  posts: PostManyRelationFilter
+  canViewAllUsers: BooleanFilter
+  canManageUsers: BooleanFilter
 }
 
-input TagOrderByInput {
+input BooleanFilter {
+  equals: Boolean
+  not: BooleanFilter
+}
+
+input RoleOrderByInput {
   id: OrderDirection
   name: OrderDirection
+  canViewAllUsers: OrderDirection
+  canManageUsers: OrderDirection
 }
 
-input TagUpdateInput {
+input RoleUpdateInput {
   name: String
-  posts: PostRelateToManyForUpdateInput
+  canViewAllUsers: Boolean
+  canManageUsers: Boolean
 }
 
-input TagUpdateArgs {
-  where: TagWhereUniqueInput!
-  data: TagUpdateInput!
+input RoleUpdateArgs {
+  where: RoleWhereUniqueInput!
+  data: RoleUpdateInput!
 }
 
-input TagCreateInput {
+input RoleCreateInput {
   name: String
-  posts: PostRelateToManyForCreateInput
+  canViewAllUsers: Boolean
+  canManageUsers: Boolean
 }
 
 """
@@ -266,21 +194,14 @@ type Mutation {
   updateUsers(data: [UserUpdateArgs!]!): [User]
   deleteUser(where: UserWhereUniqueInput!): User
   deleteUsers(where: [UserWhereUniqueInput!]!): [User]
-  createPost(data: PostCreateInput!): Post
-  createPosts(data: [PostCreateInput!]!): [Post]
-  updatePost(where: PostWhereUniqueInput!, data: PostUpdateInput!): Post
-  updatePosts(data: [PostUpdateArgs!]!): [Post]
-  deletePost(where: PostWhereUniqueInput!): Post
-  deletePosts(where: [PostWhereUniqueInput!]!): [Post]
-  createTag(data: TagCreateInput!): Tag
-  createTags(data: [TagCreateInput!]!): [Tag]
-  updateTag(where: TagWhereUniqueInput!, data: TagUpdateInput!): Tag
-  updateTags(data: [TagUpdateArgs!]!): [Tag]
-  deleteTag(where: TagWhereUniqueInput!): Tag
-  deleteTags(where: [TagWhereUniqueInput!]!): [Tag]
+  createRole(data: RoleCreateInput!): Role
+  createRoles(data: [RoleCreateInput!]!): [Role]
+  updateRole(where: RoleWhereUniqueInput!, data: RoleUpdateInput!): Role
+  updateRoles(data: [RoleUpdateArgs!]!): [Role]
+  deleteRole(where: RoleWhereUniqueInput!): Role
+  deleteRoles(where: [RoleWhereUniqueInput!]!): [Role]
   endSession: Boolean!
   authenticateUserWithPassword(email: String!, password: String!): UserAuthenticationWithPasswordResult
-  createInitialUser(data: CreateInitialUserInput!): UserAuthenticationWithPasswordSuccess!
 }
 
 union UserAuthenticationWithPasswordResult = UserAuthenticationWithPasswordSuccess | UserAuthenticationWithPasswordFailure
@@ -294,22 +215,13 @@ type UserAuthenticationWithPasswordFailure {
   message: String!
 }
 
-input CreateInitialUserInput {
-  name: String
-  email: String
-  password: String
-}
-
 type Query {
   users(where: UserWhereInput! = {}, orderBy: [UserOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: UserWhereUniqueInput): [User!]
   user(where: UserWhereUniqueInput!): User
   usersCount(where: UserWhereInput! = {}): Int
-  posts(where: PostWhereInput! = {}, orderBy: [PostOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: PostWhereUniqueInput): [Post!]
-  post(where: PostWhereUniqueInput!): Post
-  postsCount(where: PostWhereInput! = {}): Int
-  tags(where: TagWhereInput! = {}, orderBy: [TagOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: TagWhereUniqueInput): [Tag!]
-  tag(where: TagWhereUniqueInput!): Tag
-  tagsCount(where: TagWhereInput! = {}): Int
+  roles(where: RoleWhereInput! = {}, orderBy: [RoleOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: RoleWhereUniqueInput): [Role!]
+  role(where: RoleWhereUniqueInput!): Role
+  rolesCount(where: RoleWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
 }
@@ -400,11 +312,6 @@ enum KeystoneAdminUIFieldMetaItemViewFieldMode {
 enum KeystoneAdminUIFieldMetaItemViewFieldPosition {
   form
   sidebar
-}
-
-enum QueryMode {
-  default
-  insensitive
 }
 
 type KeystoneAdminUIFieldGroupMeta {
