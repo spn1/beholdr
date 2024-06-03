@@ -4,6 +4,7 @@
   "private": true,
   "scripts": {
     "dev": "keystone dev",
+    "dev:seed": "keystone dev --seed-data-from-api",
     "start": "keystone start",
     "build": "keystone build",
     "postinstall": "keystone build --no-ui --frozen"

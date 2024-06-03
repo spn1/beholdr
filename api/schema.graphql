@@ -182,6 +182,187 @@ input RoleCreateInput {
   canManageUsers: Boolean
 }
 
+type Creature {
+  id: ID!
+  name: String
+  challengeRating: Float
+  experience: Int
+  createdAt: DateTime
+}
+
+input CreatureWhereUniqueInput {
+  id: ID
+}
+
+input CreatureWhereInput {
+  AND: [CreatureWhereInput!]
+  OR: [CreatureWhereInput!]
+  NOT: [CreatureWhereInput!]
+  id: IDFilter
+  name: StringFilter
+  challengeRating: FloatFilter
+  experience: IntFilter
+  createdAt: DateTimeNullableFilter
+}
+
+input FloatFilter {
+  equals: Float
+  in: [Float!]
+  notIn: [Float!]
+  lt: Float
+  lte: Float
+  gt: Float
+  gte: Float
+  not: FloatFilter
+}
+
+input IntFilter {
+  equals: Int
+  in: [Int!]
+  notIn: [Int!]
+  lt: Int
+  lte: Int
+  gt: Int
+  gte: Int
+  not: IntFilter
+}
+
+input CreatureOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+  challengeRating: OrderDirection
+  experience: OrderDirection
+  createdAt: OrderDirection
+}
+
+input CreatureUpdateInput {
+  name: String
+  challengeRating: Float
+  experience: Int
+  createdAt: DateTime
+}
+
+input CreatureUpdateArgs {
+  where: CreatureWhereUniqueInput!
+  data: CreatureUpdateInput!
+}
+
+input CreatureCreateInput {
+  name: String
+  challengeRating: Float
+  experience: Int
+  createdAt: DateTime
+}
+
+type CreatureList {
+  id: ID!
+  name: String
+  creatures(where: CreatureWhereInput! = {}, orderBy: [CreatureOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CreatureWhereUniqueInput): [Creature!]
+  creaturesCount(where: CreatureWhereInput! = {}): Int
+  createdAt: DateTime
+}
+
+input CreatureListWhereUniqueInput {
+  id: ID
+}
+
+input CreatureListWhereInput {
+  AND: [CreatureListWhereInput!]
+  OR: [CreatureListWhereInput!]
+  NOT: [CreatureListWhereInput!]
+  id: IDFilter
+  name: StringFilter
+  creatures: CreatureManyRelationFilter
+  createdAt: DateTimeNullableFilter
+}
+
+input CreatureManyRelationFilter {
+  every: CreatureWhereInput
+  some: CreatureWhereInput
+  none: CreatureWhereInput
+}
+
+input CreatureListOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+  createdAt: OrderDirection
+}
+
+input CreatureListUpdateInput {
+  name: String
+  creatures: CreatureRelateToManyForUpdateInput
+  createdAt: DateTime
+}
+
+input CreatureRelateToManyForUpdateInput {
+  disconnect: [CreatureWhereUniqueInput!]
+  set: [CreatureWhereUniqueInput!]
+  create: [CreatureCreateInput!]
+  connect: [CreatureWhereUniqueInput!]
+}
+
+input CreatureListUpdateArgs {
+  where: CreatureListWhereUniqueInput!
+  data: CreatureListUpdateInput!
+}
+
+input CreatureListCreateInput {
+  name: String
+  creatures: CreatureRelateToManyForCreateInput
+  createdAt: DateTime
+}
+
+input CreatureRelateToManyForCreateInput {
+  create: [CreatureCreateInput!]
+  connect: [CreatureWhereUniqueInput!]
+}
+
+type Encounter {
+  id: ID!
+  name: String
+  creatures(where: CreatureWhereInput! = {}, orderBy: [CreatureOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CreatureWhereUniqueInput): [Creature!]
+  creaturesCount(where: CreatureWhereInput! = {}): Int
+  totalExperience: Int
+  createdAt: DateTime
+}
+
+input EncounterWhereUniqueInput {
+  id: ID
+}
+
+input EncounterWhereInput {
+  AND: [EncounterWhereInput!]
+  OR: [EncounterWhereInput!]
+  NOT: [EncounterWhereInput!]
+  id: IDFilter
+  name: StringFilter
+  creatures: CreatureManyRelationFilter
+  createdAt: DateTimeNullableFilter
+}
+
+input EncounterOrderByInput {
+  id: OrderDirection
+  name: OrderDirection
+  createdAt: OrderDirection
+}
+
+input EncounterUpdateInput {
+  name: String
+  creatures: CreatureRelateToManyForUpdateInput
+  createdAt: DateTime
+}
+
+input EncounterUpdateArgs {
+  where: EncounterWhereUniqueInput!
+  data: EncounterUpdateInput!
+}
+
+input EncounterCreateInput {
+  name: String
+  creatures: CreatureRelateToManyForCreateInput
+  createdAt: DateTime
+}
+
 """
 The `JSON` scalar type represents JSON values as specified by [ECMA-404](http://www.ecma-international.org/publications/files/ECMA-ST/ECMA-404.pdf).
 """
@@ -200,6 +381,24 @@ type Mutation {
   updateRoles(data: [RoleUpdateArgs!]!): [Role]
   deleteRole(where: RoleWhereUniqueInput!): Role
   deleteRoles(where: [RoleWhereUniqueInput!]!): [Role]
+  createCreature(data: CreatureCreateInput!): Creature
+  createCreatures(data: [CreatureCreateInput!]!): [Creature]
+  updateCreature(where: CreatureWhereUniqueInput!, data: CreatureUpdateInput!): Creature
+  updateCreatures(data: [CreatureUpdateArgs!]!): [Creature]
+  deleteCreature(where: CreatureWhereUniqueInput!): Creature
+  deleteCreatures(where: [CreatureWhereUniqueInput!]!): [Creature]
+  createCreatureList(data: CreatureListCreateInput!): CreatureList
+  createCreatureLists(data: [CreatureListCreateInput!]!): [CreatureList]
+  updateCreatureList(where: CreatureListWhereUniqueInput!, data: CreatureListUpdateInput!): CreatureList
+  updateCreatureLists(data: [CreatureListUpdateArgs!]!): [CreatureList]
+  deleteCreatureList(where: CreatureListWhereUniqueInput!): CreatureList
+  deleteCreatureLists(where: [CreatureListWhereUniqueInput!]!): [CreatureList]
+  createEncounter(data: EncounterCreateInput!): Encounter
+  createEncounters(data: [EncounterCreateInput!]!): [Encounter]
+  updateEncounter(where: EncounterWhereUniqueInput!, data: EncounterUpdateInput!): Encounter
+  updateEncounters(data: [EncounterUpdateArgs!]!): [Encounter]
+  deleteEncounter(where: EncounterWhereUniqueInput!): Encounter
+  deleteEncounters(where: [EncounterWhereUniqueInput!]!): [Encounter]
   endSession: Boolean!
   authenticateUserWithPassword(email: String!, password: String!): UserAuthenticationWithPasswordResult
 }
@@ -222,6 +421,15 @@ type Query {
   roles(where: RoleWhereInput! = {}, orderBy: [RoleOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: RoleWhereUniqueInput): [Role!]
   role(where: RoleWhereUniqueInput!): Role
   rolesCount(where: RoleWhereInput! = {}): Int
+  creatures(where: CreatureWhereInput! = {}, orderBy: [CreatureOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CreatureWhereUniqueInput): [Creature!]
+  creature(where: CreatureWhereUniqueInput!): Creature
+  creaturesCount(where: CreatureWhereInput! = {}): Int
+  creatureLists(where: CreatureListWhereInput! = {}, orderBy: [CreatureListOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: CreatureListWhereUniqueInput): [CreatureList!]
+  creatureList(where: CreatureListWhereUniqueInput!): CreatureList
+  creatureListsCount(where: CreatureListWhereInput! = {}): Int
+  encounters(where: EncounterWhereInput! = {}, orderBy: [EncounterOrderByInput!]! = [], take: Int, skip: Int! = 0, cursor: EncounterWhereUniqueInput): [Encounter!]
+  encounter(where: EncounterWhereUniqueInput!): Encounter
+  encountersCount(where: EncounterWhereInput! = {}): Int
   keystone: KeystoneMeta!
   authenticatedItem: AuthenticatedItem
 }

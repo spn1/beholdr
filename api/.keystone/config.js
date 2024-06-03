@@ -22,7 +22,7 @@ __export(keystone_exports, {
   default: () => keystone_default
 });
 module.exports = __toCommonJS(keystone_exports);
-var import_core3 = require("@keystone-6/core");
+var import_core6 = require("@keystone-6/core");
 
 // src/schema/models/user.ts
 var import_core = require("@keystone-6/core");
@@ -171,10 +171,157 @@ var Role = (0, import_core2.list)({
   }
 });
 
+// src/schema/models/creature.ts
+var import_core3 = require("@keystone-6/core");
+var import_fields4 = require("@keystone-6/core/fields");
+var import_access2 = require("@keystone-6/core/access");
+var Creature = (0, import_core3.list)({
+  access: import_access2.allowAll,
+  fields: {
+    name: (0, import_fields4.text)({
+      validation: {
+        isRequired: true
+      }
+    }),
+    challengeRating: (0, import_fields4.float)({
+      defaultValue: 0,
+      validation: {
+        isRequired: true,
+        min: 0,
+        max: 30
+      }
+    }),
+    experience: (0, import_fields4.integer)({
+      defaultValue: 0,
+      validation: {
+        isRequired: true,
+        min: 0,
+        max: 1e6
+      }
+    }),
+    createdAt: (0, import_fields4.timestamp)({
+      ui: {
+        createView: {
+          fieldMode: "hidden"
+        }
+      },
+      defaultValue: { kind: "now" }
+    })
+  },
+  hooks: {
+    afterOperation: async ({ operation, item }) => {
+      console.log(`\u2705 ${operation.toUpperCase()} on ${item.name} successul \u2705`);
+      return item;
+    }
+  }
+});
+
+// src/schema/models/creature-list.ts
+var import_core4 = require("@keystone-6/core");
+var import_access3 = require("@keystone-6/core/access");
+var import_fields5 = require("@keystone-6/core/fields");
+var CreatureList = (0, import_core4.list)({
+  access: import_access3.allowAll,
+  fields: {
+    name: (0, import_fields5.text)({
+      validation: {
+        isRequired: true
+      }
+    }),
+    creatures: (0, import_fields5.relationship)({
+      ref: "Creature",
+      many: true
+    }),
+    createdAt: (0, import_fields5.timestamp)({
+      ui: {
+        createView: {
+          fieldMode: "hidden"
+        }
+      },
+      defaultValue: { kind: "now" }
+    })
+  }
+});
+
+// src/schema/models/encounter.ts
+var import_core5 = require("@keystone-6/core");
+var import_access4 = require("@keystone-6/core/access");
+var import_fields6 = require("@keystone-6/core/fields");
+
+// src/lib/calculate-encounter-experience.ts
+var encounterMultipliers = {
+  1: 1,
+  2: 1.5,
+  3: 2,
+  4: 2,
+  5: 2,
+  6: 2,
+  7: 2.5,
+  8: 2.5,
+  9: 2.5,
+  10: 2.5,
+  11: 3,
+  12: 3,
+  13: 3,
+  14: 3,
+  15: 4
+};
+var calculateEncounterExperience = (creatures) => {
+  const creatureCount = creatures.length;
+  const experienceSum = creatures.reduce((acc, { experience }) => {
+    return acc += experience;
+  }, 0);
+  return experienceSum * encounterMultipliers[creatureCount];
+};
+
+// src/schema/models/encounter.ts
+var Encounter = (0, import_core5.list)({
+  access: import_access4.allowAll,
+  fields: {
+    name: (0, import_fields6.text)({
+      validation: {
+        isRequired: true
+      }
+    }),
+    creatures: (0, import_fields6.relationship)({
+      ref: "Creature",
+      many: true
+    }),
+    totalExperience: (0, import_fields6.virtual)({
+      field: (lists2) => import_core5.graphql.field({
+        type: import_core5.graphql.Int,
+        async resolve(item, args, context) {
+          const { creatures } = await context.query.Encounter.findOne({
+            query: "creatures { experience }",
+            where: {
+              id: item.id
+            }
+          });
+          if (creatures.length === 0) {
+            return 0;
+          }
+          return calculateEncounterExperience(creatures);
+        }
+      })
+    }),
+    createdAt: (0, import_fields6.timestamp)({
+      ui: {
+        createView: {
+          fieldMode: "hidden"
+        }
+      },
+      defaultValue: { kind: "now" }
+    })
+  }
+});
+
 // src/schema/schema.ts
 var lists = {
   User,
-  Role
+  Role,
+  Creature,
+  CreatureList,
+  Encounter
 };
 
 // src/auth/auth.ts
@@ -204,7 +351,7 @@ var session = (0, import_session.statelessSessions)({
 // keystone.ts
 var databaseUrl = process.env.DATABASE_URL || "mongodb://localhost/beholdr";
 var keystone_default = withAuth(
-  (0, import_core3.config)({
+  (0, import_core6.config)({
     db: {
       provider: "postgresql",
       url: databaseUrl,

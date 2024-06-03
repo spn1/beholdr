@@ -30,3 +30,27 @@ model Role {
   canManageUsers  Boolean @default(false)
   from_User_role  User[]  @relation("User_role")
 }
+
+model Creature {
+  id                          String         @id @default(uuid()) @postgresql.Uuid
+  name                        String         @default("")
+  challengeRating             Float          @default(0)
+  experience                  Int            @default(0)
+  createdAt                   DateTime?      @default(now())
+  from_CreatureList_creatures CreatureList[] @relation("CreatureList_creatures")
+  from_Encounter_creatures    Encounter[]    @relation("Encounter_creatures")
+}
+
+model CreatureList {
+  id        String     @id @default(uuid()) @postgresql.Uuid
+  name      String     @default("")
+  creatures Creature[] @relation("CreatureList_creatures")
+  createdAt DateTime?  @default(now())
+}
+
+model Encounter {
+  id        String     @id @default(uuid()) @postgresql.Uuid
+  name      String     @default("")
+  creatures Creature[] @relation("Encounter_creatures")
+  createdAt DateTime?  @default(now())
+}
