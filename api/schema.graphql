@@ -137,6 +137,7 @@ type Role {
   name: String
   canViewAllUsers: Boolean
   canManageUsers: Boolean
+  canManageCreatures: Boolean
 }
 
 input RoleWhereUniqueInput {
@@ -151,6 +152,7 @@ input RoleWhereInput {
   name: StringFilter
   canViewAllUsers: BooleanFilter
   canManageUsers: BooleanFilter
+  canManageCreatures: BooleanFilter
 }
 
 input BooleanFilter {
@@ -163,12 +165,14 @@ input RoleOrderByInput {
   name: OrderDirection
   canViewAllUsers: OrderDirection
   canManageUsers: OrderDirection
+  canManageCreatures: OrderDirection
 }
 
 input RoleUpdateInput {
   name: String
   canViewAllUsers: Boolean
   canManageUsers: Boolean
+  canManageCreatures: Boolean
 }
 
 input RoleUpdateArgs {
@@ -180,6 +184,7 @@ input RoleCreateInput {
   name: String
   canViewAllUsers: Boolean
   canManageUsers: Boolean
+  canManageCreatures: Boolean
 }
 
 type Creature {
@@ -188,6 +193,7 @@ type Creature {
   challengeRating: Float
   experience: Int
   createdAt: DateTime
+  createdBy: User
 }
 
 input CreatureWhereUniqueInput {
@@ -203,6 +209,7 @@ input CreatureWhereInput {
   challengeRating: FloatFilter
   experience: IntFilter
   createdAt: DateTimeNullableFilter
+  createdBy: UserWhereInput
 }
 
 input FloatFilter {
@@ -240,6 +247,13 @@ input CreatureUpdateInput {
   challengeRating: Float
   experience: Int
   createdAt: DateTime
+  createdBy: UserRelateToOneForUpdateInput
+}
+
+input UserRelateToOneForUpdateInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
+  disconnect: Boolean
 }
 
 input CreatureUpdateArgs {
@@ -252,6 +266,12 @@ input CreatureCreateInput {
   challengeRating: Float
   experience: Int
   createdAt: DateTime
+  createdBy: UserRelateToOneForCreateInput
+}
+
+input UserRelateToOneForCreateInput {
+  create: UserCreateInput
+  connect: UserWhereUniqueInput
 }
 
 type CreatureList {

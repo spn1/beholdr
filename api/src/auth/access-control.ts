@@ -1,5 +1,3 @@
-// At it's simplest, access control is either a yes or no value depending on the users session
-
 import { permissionsList } from './permissions';
 import {
   ListAccessArgs,
@@ -22,7 +20,6 @@ export const permissions = Object.fromEntries(
 
 export const itemAccessControlRules: Record<string, ItemAccessControlFunction> = {
   canManageUsers: ({ session, item }: ListAccessArgs) => {
-    console.log(`🦧 [access-control.ts] item access session: `, session);
     if (!isSignedIn({ session })) {
       return false;
     }
@@ -32,12 +29,22 @@ export const itemAccessControlRules: Record<string, ItemAccessControlFunction> =
     }
 
     return item?.id === session?.itemId;
+  },
+  canManageCreatures: ({ session, item }: ListAccessArgs) => {
+    if (!isSignedIn({ session })) {
+      return false;
+    }
+
+    if (permissions.canManageCreatures({ session })) {
+      return true;
+    }
+
+    return item?.createdById === session?.itemId;
   }
 };
 
 export const filterAccessControlRules: Record<string, FilterAccessControlFunction> = {
   canViewAllUsers: ({ session }) => {
-    console.log(`🦧 [access-control.ts] item access session: `, session);
     if (!isSignedIn({ session })) {
       return false;
     }
@@ -49,7 +56,6 @@ export const filterAccessControlRules: Record<string, FilterAccessControlFunctio
     return { id: { equals: session?.itemId } };
   },
   canManageUsers: ({ session }) => {
-    console.log(`🦧 [access-control.ts] filter access session: `, session);
     if (!isSignedIn({ session })) {
       return false;
     }
@@ -58,21 +64,40 @@ export const filterAccessControlRules: Record<string, FilterAccessControlFunctio
       return true;
     }
 
-    console.log(`🦧 [access-control.ts] returning filter`);
-
     return { id: { equals: session?.itemId } };
-  }
+  },
+  canManageCreatures: ({ session }) => {
+    if (!isSignedIn({ session })) {
+      return false;
+    }
+
+    if (permissions.canManageCreatures({ session })) {
+      return true;
+    }
+
+    return {
+      createdBy:  {
+        id: { equals: session?.itemId }
+      }
+    };
+  },
 };
 
 export const operationAccessControlRules: Record<string, OperationAccessControlFunction> = {
   canManageUsers: ({ session }: ListAccessArgs) => {
-    console.log(`🦧 [access-control.ts] operation access session: `, session);
     if (!isSignedIn({ session })) {
       return false;
     }
 
     return permissions.canManageUsers({ session });
-  }
+  },
+  canManageCreatures: ({ session }: ListAccessArgs) => {
+    if (!isSignedIn({ session })) {
+      return false;
+    }
+
+    return permissions.canManageCreatures({ session });
+  },
 }
 
 export const rules = {

@@ -38,6 +38,10 @@ var permissionFields = {
   canManageUsers: (0, import_fields.checkbox)({
     defaultValue: false,
     label: "User can update & delete all users"
+  }),
+  canManageCreatures: (0, import_fields.checkbox)({
+    defaultValue: false,
+    label: "User can update & delete all creatures"
   })
 };
 
@@ -56,7 +60,6 @@ var permissions = Object.fromEntries(
 );
 var itemAccessControlRules = {
   canManageUsers: ({ session: session2, item }) => {
-    console.log(`\u{1F9A7} [access-control.ts] item access session: `, session2);
     if (!isSignedIn({ session: session2 })) {
       return false;
     }
@@ -64,11 +67,19 @@ var itemAccessControlRules = {
       return true;
     }
     return item?.id === session2?.itemId;
+  },
+  canManageCreatures: ({ session: session2, item }) => {
+    if (!isSignedIn({ session: session2 })) {
+      return false;
+    }
+    if (permissions.canManageCreatures({ session: session2 })) {
+      return true;
+    }
+    return item?.createdById === session2?.itemId;
   }
 };
 var filterAccessControlRules = {
   canViewAllUsers: ({ session: session2 }) => {
-    console.log(`\u{1F9A7} [access-control.ts] item access session: `, session2);
     if (!isSignedIn({ session: session2 })) {
       return false;
     }
@@ -78,24 +89,40 @@ var filterAccessControlRules = {
     return { id: { equals: session2?.itemId } };
   },
   canManageUsers: ({ session: session2 }) => {
-    console.log(`\u{1F9A7} [access-control.ts] filter access session: `, session2);
     if (!isSignedIn({ session: session2 })) {
       return false;
     }
     if (permissions.canManageUsers({ session: session2 })) {
       return true;
     }
-    console.log(`\u{1F9A7} [access-control.ts] returning filter`);
     return { id: { equals: session2?.itemId } };
+  },
+  canManageCreatures: ({ session: session2 }) => {
+    if (!isSignedIn({ session: session2 })) {
+      return false;
+    }
+    if (permissions.canManageCreatures({ session: session2 })) {
+      return true;
+    }
+    return {
+      createdBy: {
+        id: { equals: session2?.itemId }
+      }
+    };
   }
 };
 var operationAccessControlRules = {
   canManageUsers: ({ session: session2 }) => {
-    console.log(`\u{1F9A7} [access-control.ts] operation access session: `, session2);
     if (!isSignedIn({ session: session2 })) {
       return false;
     }
     return permissions.canManageUsers({ session: session2 });
+  },
+  canManageCreatures: ({ session: session2 }) => {
+    if (!isSignedIn({ session: session2 })) {
+      return false;
+    }
+    return permissions.canManageCreatures({ session: session2 });
   }
 };
 var rules = {
@@ -131,9 +158,24 @@ var User = (0, import_core.list)({
       access: {
         read: itemAccessControlRules.canManageUsers,
         update: permissions.canManageUsers
+      },
+      ui: {
+        itemView: {
+          fieldMode: (args) => itemAccessControlRules.canManageUsers(args) ? "edit" : "hidden"
+        },
+        listView: {
+          fieldMode: (args) => itemAccessControlRules.canManageUsers(args) ? "read" : "hidden"
+        }
       }
     }),
-    password: (0, import_fields2.password)({ validation: { isRequired: true } }),
+    password: (0, import_fields2.password)({
+      validation: { isRequired: true },
+      ui: {
+        itemView: {
+          fieldMode: (args) => itemAccessControlRules.canManageUsers(args) ? "edit" : "hidden"
+        }
+      }
+    }),
     createdAt: (0, import_fields2.timestamp)({
       defaultValue: { kind: "now" },
       ui: {
@@ -152,7 +194,7 @@ var User = (0, import_core.list)({
       },
       ui: {
         itemView: {
-          fieldMode: permissions.canManageUsers ? "edit" : "read"
+          fieldMode: (args) => permissions.canManageUsers(args) ? "edit" : "read"
         }
       }
     })
@@ -174,9 +216,24 @@ var Role = (0, import_core2.list)({
 // src/schema/models/creature.ts
 var import_core3 = require("@keystone-6/core");
 var import_fields4 = require("@keystone-6/core/fields");
-var import_access2 = require("@keystone-6/core/access");
 var Creature = (0, import_core3.list)({
-  access: import_access2.allowAll,
+  access: {
+    operation: {
+      create: () => true,
+      query: () => true,
+      update: () => true,
+      delete: permissions.canManageCreatures
+    },
+    filter: {
+      query: () => true,
+      update: filterAccessControlRules.canManageCreatures,
+      delete: permissions.canManageCreatures
+    },
+    item: {
+      update: itemAccessControlRules.canManageCreatures,
+      delete: permissions.canManageCreatures
+    }
+  },
   fields: {
     name: (0, import_fields4.text)({
       validation: {
@@ -206,22 +263,22 @@ var Creature = (0, import_core3.list)({
         }
       },
       defaultValue: { kind: "now" }
+    }),
+    createdBy: (0, import_fields4.relationship)({
+      ref: "User",
+      access: {
+        update: () => false
+      }
     })
-  },
-  hooks: {
-    afterOperation: async ({ operation, item }) => {
-      console.log(`\u2705 ${operation.toUpperCase()} on ${item.name} successul \u2705`);
-      return item;
-    }
   }
 });
 
 // src/schema/models/creature-list.ts
 var import_core4 = require("@keystone-6/core");
-var import_access3 = require("@keystone-6/core/access");
+var import_access2 = require("@keystone-6/core/access");
 var import_fields5 = require("@keystone-6/core/fields");
 var CreatureList = (0, import_core4.list)({
-  access: import_access3.allowAll,
+  access: import_access2.allowAll,
   fields: {
     name: (0, import_fields5.text)({
       validation: {
@@ -245,7 +302,7 @@ var CreatureList = (0, import_core4.list)({
 
 // src/schema/models/encounter.ts
 var import_core5 = require("@keystone-6/core");
-var import_access4 = require("@keystone-6/core/access");
+var import_access3 = require("@keystone-6/core/access");
 var import_fields6 = require("@keystone-6/core/fields");
 
 // src/lib/calculate-encounter-experience.ts
@@ -276,7 +333,7 @@ var calculateEncounterExperience = (creatures) => {
 
 // src/schema/models/encounter.ts
 var Encounter = (0, import_core5.list)({
-  access: import_access4.allowAll,
+  access: import_access3.allowAll,
   fields: {
     name: (0, import_fields6.text)({
       validation: {

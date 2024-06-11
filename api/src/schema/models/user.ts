@@ -12,6 +12,7 @@ import {
   itemAccessControlRules,
   filterAccessControlRules,
 } from '../../auth/access-control';
+import { ListAccessArgs } from '../../types/auth';
 
 export const User: Lists.User = list({
   access: {
@@ -39,9 +40,24 @@ export const User: Lists.User = list({
       access: {
         read: itemAccessControlRules.canManageUsers,
         update: permissions.canManageUsers,
+      },
+      ui: {
+        itemView: {
+          fieldMode: (args: ListAccessArgs) => itemAccessControlRules.canManageUsers(args) ? 'edit' : 'hidden'
+        },
+        listView: {
+          fieldMode: (args: ListAccessArgs) => itemAccessControlRules.canManageUsers(args) ? 'read' : 'hidden'
+        }
       }
     }),
-    password: password({ validation: { isRequired: true } }),
+    password: password({
+      validation: { isRequired: true },
+      ui: {
+        itemView: {
+          fieldMode: (args: ListAccessArgs) => itemAccessControlRules.canManageUsers(args) ? 'edit' : 'hidden'
+        }
+      }
+    }),
     createdAt: timestamp({
       defaultValue: { kind: 'now' },
       ui: {
@@ -60,8 +76,8 @@ export const User: Lists.User = list({
       },
       ui: {
         itemView: {
-          fieldMode: permissions.canManageUsers ? 'edit' : 'read'
-        }
+          fieldMode: (args: ListAccessArgs) => permissions.canManageUsers(args) ? 'edit' : 'read'
+        },
       }
     }),
   },

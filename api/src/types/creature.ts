@@ -7,10 +7,14 @@ import {
   CreatureSpeed,
 } from './creature-properties';
 
+import { User } from '../types/user';
+
 export type Creature = {
   name: string;
   challengeRating: number;
   experience: number;
+  createdBy: User
+  createdAt: Date;
 }
 
 export type FullCreature = {

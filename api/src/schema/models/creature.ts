@@ -4,14 +4,35 @@ import {
   integer,
   float,
   timestamp,
+  relationship,
 } from '@keystone-6/core/fields';
 
 import type { Lists } from '.keystone/types';
-import { permissions, rules } from '../../auth/access-control';
-import { allowAll } from '@keystone-6/core/access';
+import {
+  filterAccessControlRules,
+  operationAccessControlRules,
+  itemAccessControlRules,
+  permissions
+} from '../../auth/access-control';
 
 export const Creature: Lists.Creature = list({
-  access: allowAll,
+  access: {
+    operation: {
+      create: () => true,
+      query: () => true,
+      update:() => true,
+      delete: permissions.canManageCreatures,
+    },
+    filter: {
+      query: () => true,
+      update: filterAccessControlRules.canManageCreatures,
+      delete: permissions.canManageCreatures,
+    },
+    item: {
+      update: itemAccessControlRules.canManageCreatures,
+      delete: permissions.canManageCreatures,
+    }
+  },
   fields: {
     name: text({
       validation: {
@@ -42,11 +63,11 @@ export const Creature: Lists.Creature = list({
       },
       defaultValue: { kind: 'now' },
     }),
+    createdBy: relationship({
+      ref: "User",
+      access: {
+        update: () => false
+      }
+    }),
   },
-  hooks: {
-    afterOperation: async ({ operation, item }) => {
-      console.log(`✅ ${operation.toUpperCase()} on ${item.name} successul ✅`);
-      return item;
-    }
-  }
 });

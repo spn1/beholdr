@@ -12,23 +12,25 @@ generator client {
 }
 
 model User {
-  id        String    @id @default(uuid()) @postgresql.Uuid
-  name      String    @default("")
-  email     String    @unique @default("")
-  password  String
-  createdAt DateTime? @default(now())
-  role      Role?     @relation("User_role", fields: [roleId], references: [id])
-  roleId    String?   @map("role") @postgresql.Uuid
+  id                      String     @id @default(uuid()) @postgresql.Uuid
+  name                    String     @default("")
+  email                   String     @unique @default("")
+  password                String
+  createdAt               DateTime?  @default(now())
+  role                    Role?      @relation("User_role", fields: [roleId], references: [id])
+  roleId                  String?    @map("role") @postgresql.Uuid
+  from_Creature_createdBy Creature[] @relation("Creature_createdBy")
 
   @@index([roleId])
 }
 
 model Role {
-  id              String  @id @default(uuid()) @postgresql.Uuid
-  name            String  @default("")
-  canViewAllUsers Boolean @default(false)
-  canManageUsers  Boolean @default(false)
-  from_User_role  User[]  @relation("User_role")
+  id                 String  @id @default(uuid()) @postgresql.Uuid
+  name               String  @default("")
+  canViewAllUsers    Boolean @default(false)
+  canManageUsers     Boolean @default(false)
+  canManageCreatures Boolean @default(false)
+  from_User_role     User[]  @relation("User_role")
 }
 
 model Creature {
@@ -37,8 +39,12 @@ model Creature {
   challengeRating             Float          @default(0)
   experience                  Int            @default(0)
   createdAt                   DateTime?      @default(now())
+  createdBy                   User?          @relation("Creature_createdBy", fields: [createdById], references: [id])
+  createdById                 String?        @map("createdBy") @postgresql.Uuid
   from_CreatureList_creatures CreatureList[] @relation("CreatureList_creatures")
   from_Encounter_creatures    Encounter[]    @relation("Encounter_creatures")
+
+  @@index([createdById])
 }
 
 model CreatureList {
