@@ -1,58 +1,112 @@
-import {
-  CreatureSize,
-  CreatureAction,
-  CreatureArmourClass,
-  CreatureProficiency,
-  CreatureSpecialAbility,
-  CreatureSpeed,
-} from "./creature-properties";
-
 import { User } from "../types/user";
 
-export type Creature = {
-  name: string;
-  challengeRating: number;
-  experience: number;
-  createdBy?: User;
-  createdAt?: Date;
+export enum Size {
+  TINY = "Tiny",
+  SMALL = "Small",
+  MEDIUM = "Medium",
+  LARGE = "Large",
+  HUGE = "Huge",
+  GARGANTUAN = "Gargantuan",
+}
+
+export type Speed = {
+  burrow?: string;
+  climb?: string;
+  fly?: string;
+  hover?: string;
+  swim?: string;
+  walk?: string;
 };
 
+export type Proficiency = {
+  index: string;
+  name: string;
+  url: string;
+};
+
+export type SpecialAbility = {
+  name: string;
+  desc: string;
+};
+
+export type LegendaryAction = {
+  name: string;
+  desc: string;
+  attack_bonus?: number;
+  damage?: ActionDamage[];
+};
+
+export type Action = {
+  name: string;
+  desc: string;
+  attackBonus: number;
+  damage: ActionDamage[];
+};
+
+export type ActionDamage = {
+  damageType: DamageType;
+  damageDice: string;
+};
+
+export type DamageType = {
+  index: string;
+  name: string;
+  url: string;
+};
+
+export type Sense = {
+  blindsight?: string;
+  darkvision?: string;
+  passive_perception: number;
+  tremorsense?: string;
+  truesight?: string;
+};
+
+/**
+ * Creature is a subset of FullCreature, which is the information that is actually added to the internal database.
+ */
+export type Creature = Omit<
+  FullCreature,
+  | "proficiencies"
+  | "speed"
+  | "special_abilities"
+  | "actions"
+  | "legendary_actions"
+>;
+
+/**
+ * FullCreature is the full representation of a creature from the API.
+ */
 export type FullCreature = {
   index: string;
   name: string;
-  size: CreatureSize;
-  type: string; // Turn into enum
-  alignment: string; // Turn into enum
-  armor_class: CreatureArmourClass[];
+  size: Size;
+  type: string;
+  alignment: string;
+  armor_class: number;
   hit_points: number;
   hit_dice: string;
   hit_points_roll: string;
-  speed: CreatureSpeed;
+  speed: Speed;
   strength: number;
   dexterity: number;
   constitution: number;
   intelligence: number;
   wisdom: number;
   charisma: number;
-  proficiencies: CreatureProficiency[];
-  damage_vulnerabilities: [];
-  damage_resistances: [];
-  damage_immunities: [];
-  condition_immunities: [];
-  senses: { [type: string]: number };
+  proficiencies: Proficiency[];
+  damage_vulnerabilities: string[];
+  damage_resistances: string[];
+  damage_immunities: string[];
+  condition_immunities: string[];
+  senses: Sense;
   languages: string;
   challenge_rating: number;
   proficiency_bonus: number;
   xp: number;
-  special_abilities: CreatureSpecialAbility[];
-  actions: CreatureAction[];
+  special_abilities: SpecialAbility[];
+  actions: Action[];
   image: string;
   url: string;
-  legendary_actions: [];
-};
-
-export type CreatureIndex = {
-  index: string;
-  name: string;
-  url: string;
+  legendary_actions: LegendaryAction[];
 };

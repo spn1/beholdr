@@ -276,6 +276,19 @@ var Creature = (0, import_core3.list)({
         max: 1e6
       }
     }),
+    size: (0, import_fields4.select)({
+      options: [
+        { label: "Tiny", value: "TINY" },
+        { label: "Small", value: "SMALL" },
+        { label: "Medium", value: "MEDIUM" },
+        { label: "Large", value: "LARGE" },
+        { label: "Huge", value: "HUGE" },
+        { label: "Gargantuan", value: "GARGANTUAN" }
+      ],
+      ui: {
+        displayMode: "segmented-control"
+      }
+    }),
     createdAt: (0, import_fields4.timestamp)({
       ui: {
         createView: {
@@ -434,10 +447,12 @@ var selectCreatureData = (creatures) => {
     experience: creature.xp
   }));
 };
-var fetchDataFromApi = async (path) => {
+var fetchCreatureDataFromApi = async (path) => {
   const data = await fetch(`${API_URL}${path}`);
   const { results } = await data.json();
-  const indexes = results.map(({ index }) => index);
+  const indexes = results.map(
+    ({ index }) => index
+  );
   const creatures = await Promise.all(
     indexes.map(async (index) => {
       const data2 = await fetch(`${API_URL}/monsters/${index}`);
@@ -447,13 +462,9 @@ var fetchDataFromApi = async (path) => {
   return creatures;
 };
 var insertSeedDataFromApi = async (context) => {
-  const creatures = await fetchDataFromApi("/monsters?name=dragon");
+  const creatures = await fetchCreatureDataFromApi("/monsters/?name=bear");
   const reducedCreatures = selectCreatureData(creatures);
-  await Promise.all(
-    reducedCreatures.map(async (creature) => {
-      await context.query.Creature.createOne({ data: creature });
-    })
-  );
+  console.log(`\u{1F6A8} [seed-data.ts] creatures: `, creatures);
   console.log("\u{1F331} Seeded Database! \u{1F331}");
 };
 

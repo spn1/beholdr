@@ -19,15 +19,19 @@ const selectCreatureData = (creatures: FullCreature[]): Creature[] => {
 };
 
 /**
- * Fetches data from the DnD API using the specified path.
+ * Fetches creature data from the DnD API using the specified path.
  * @param path The path to get information from
  * @returns Array of creatures
  */
-const fetchDataFromApi = async (path: string): Promise<FullCreature[]> => {
+const fetchCreatureDataFromApi = async (
+  path: string
+): Promise<FullCreature[]> => {
   const data = await fetch(`${API_URL}${path}`);
   const { results } = await data.json();
 
-  const indexes = results.map(({ index }: CreatureIndex) => index);
+  const indexes = results.map(
+    ({ index }: Pick<FullCreature, "index">) => index
+  );
   const creatures = await Promise.all(
     indexes.map(async (index) => {
       const data = await fetch(`${API_URL}/monsters/${index}`);
@@ -41,14 +45,16 @@ const fetchDataFromApi = async (path: string): Promise<FullCreature[]> => {
 export const insertSeedDataFromApi = async (
   context: KeystoneContext<TypeInfo>
 ) => {
-  const creatures = await fetchDataFromApi("/monsters?name=dragon");
+  const creatures = await fetchCreatureDataFromApi("/monsters/?name=bear");
   const reducedCreatures = selectCreatureData(creatures);
 
-  await Promise.all(
-    reducedCreatures.map(async (creature: Creature) => {
-      await context.query.Creature.createOne({ data: creature });
-    })
-  );
+  // await Promise.all(
+  //   reducedCreatures.map(async (creature: Creature) => {
+  //     await context.query.Creature.createOne({ data: creature });
+  //   })
+  // );
+
+  console.log(`🚨 [seed-data.ts] creatures: `, creatures);
 
   console.log("🌱 Seeded Database! 🌱");
 };
