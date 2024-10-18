@@ -30,6 +30,7 @@ model Role {
   canViewAllUsers    Boolean @default(false)
   canManageUsers     Boolean @default(false)
   canManageCreatures Boolean @default(false)
+  canManageRoles     Boolean @default(false)
   from_User_role     User[]  @relation("User_role")
 }
 

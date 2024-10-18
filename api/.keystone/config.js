@@ -42,6 +42,10 @@ var permissionFields = {
   canManageCreatures: (0, import_fields.checkbox)({
     defaultValue: false,
     label: "User can update & delete all creatures"
+  }),
+  canManageRoles: (0, import_fields.checkbox)({
+    defaultValue: false,
+    label: "User can update & delete all roles"
   })
 };
 
@@ -203,10 +207,26 @@ var User = (0, import_core.list)({
 
 // src/schema/models/role.ts
 var import_core2 = require("@keystone-6/core");
-var import_access = require("@keystone-6/core/access");
 var import_fields3 = require("@keystone-6/core/fields");
 var Role = (0, import_core2.list)({
-  access: import_access.allowAll,
+  access: {
+    operation: {
+      query: () => true,
+      create: permissions.canManageRoles,
+      update: permissions.canManageRoles,
+      delete: permissions.canManageRoles
+    },
+    filter: {
+      query: () => true,
+      update: permissions.canManageRoles,
+      delete: permissions.canManageRoles
+    },
+    item: {
+      create: permissions.canManageRoles,
+      update: permissions.canManageRoles,
+      delete: permissions.canManageRoles
+    }
+  },
   fields: {
     name: (0, import_fields3.text)({ validation: { isRequired: true } }),
     ...permissionFields
@@ -275,10 +295,10 @@ var Creature = (0, import_core3.list)({
 
 // src/schema/models/creature-list.ts
 var import_core4 = require("@keystone-6/core");
-var import_access2 = require("@keystone-6/core/access");
+var import_access = require("@keystone-6/core/access");
 var import_fields5 = require("@keystone-6/core/fields");
 var CreatureList = (0, import_core4.list)({
-  access: import_access2.allowAll,
+  access: import_access.allowAll,
   fields: {
     name: (0, import_fields5.text)({
       validation: {
@@ -302,7 +322,7 @@ var CreatureList = (0, import_core4.list)({
 
 // src/schema/models/encounter.ts
 var import_core5 = require("@keystone-6/core");
-var import_access3 = require("@keystone-6/core/access");
+var import_access2 = require("@keystone-6/core/access");
 var import_fields6 = require("@keystone-6/core/fields");
 
 // src/lib/calculate-encounter-experience.ts
@@ -333,7 +353,7 @@ var calculateEncounterExperience = (creatures) => {
 
 // src/schema/models/encounter.ts
 var Encounter = (0, import_core5.list)({
-  access: import_access3.allowAll,
+  access: import_access2.allowAll,
   fields: {
     name: (0, import_fields6.text)({
       validation: {
@@ -405,8 +425,40 @@ var session = (0, import_session.statelessSessions)({
   secret: sessionSecret
 });
 
+// src/seed/seed-data.ts
+var API_URL = "https://www.dnd5eapi.co/api";
+var selectCreatureData = (creatures) => {
+  return creatures.map((creature) => ({
+    name: creature.name,
+    challengeRating: creature.challenge_rating,
+    experience: creature.xp
+  }));
+};
+var fetchDataFromApi = async (path) => {
+  const data = await fetch(`${API_URL}${path}`);
+  const { results } = await data.json();
+  const indexes = results.map(({ index }) => index);
+  const creatures = await Promise.all(
+    indexes.map(async (index) => {
+      const data2 = await fetch(`${API_URL}/monsters/${index}`);
+      return await data2.json();
+    })
+  );
+  return creatures;
+};
+var insertSeedDataFromApi = async (context) => {
+  const creatures = await fetchDataFromApi("/monsters?name=dragon");
+  const reducedCreatures = selectCreatureData(creatures);
+  await Promise.all(
+    reducedCreatures.map(async (creature) => {
+      await context.query.Creature.createOne({ data: creature });
+    })
+  );
+  console.log("\u{1F331} Seeded Database! \u{1F331}");
+};
+
 // keystone.ts
-var databaseUrl = process.env.DATABASE_URL || "mongodb://localhost/beholdr";
+var databaseUrl = process.env.DATABASE_URL;
 var keystone_default = withAuth(
   (0, import_core6.config)({
     db: {
@@ -414,6 +466,10 @@ var keystone_default = withAuth(
       url: databaseUrl,
       onConnect: async (context) => {
         console.log("\u{1F4BE} Database Connection Established \u{1F4BE}");
+        if (process.argv.includes("--seed-data-from-api")) {
+          console.log("\u{1F331} Seeding Database \u{1F331}");
+          await insertSeedDataFromApi(context);
+        }
       },
       enableLogging: true,
       idField: { kind: "uuid" }

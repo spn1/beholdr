@@ -13,4 +13,8 @@ export const permissionFields = {
     defaultValue: false,
     label: 'User can update & delete all creatures'
   }),
+  canManageRoles: checkbox({
+    defaultValue: false,
+    label: 'User can update & delete all roles'
+  }),
 };

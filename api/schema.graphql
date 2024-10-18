@@ -138,6 +138,7 @@ type Role {
   canViewAllUsers: Boolean
   canManageUsers: Boolean
   canManageCreatures: Boolean
+  canManageRoles: Boolean
 }
 
 input RoleWhereUniqueInput {
@@ -153,6 +154,7 @@ input RoleWhereInput {
   canViewAllUsers: BooleanFilter
   canManageUsers: BooleanFilter
   canManageCreatures: BooleanFilter
+  canManageRoles: BooleanFilter
 }
 
 input BooleanFilter {
@@ -166,6 +168,7 @@ input RoleOrderByInput {
   canViewAllUsers: OrderDirection
   canManageUsers: OrderDirection
   canManageCreatures: OrderDirection
+  canManageRoles: OrderDirection
 }
 
 input RoleUpdateInput {
@@ -173,6 +176,7 @@ input RoleUpdateInput {
   canViewAllUsers: Boolean
   canManageUsers: Boolean
   canManageCreatures: Boolean
+  canManageRoles: Boolean
 }
 
 input RoleUpdateArgs {
@@ -185,6 +189,7 @@ input RoleCreateInput {
   canViewAllUsers: Boolean
   canManageUsers: Boolean
   canManageCreatures: Boolean
+  canManageRoles: Boolean
 }
 
 type Creature {

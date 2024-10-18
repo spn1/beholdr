@@ -5,21 +5,21 @@ import {
   CreatureProficiency,
   CreatureSpecialAbility,
   CreatureSpeed,
-} from './creature-properties';
+} from "./creature-properties";
 
-import { User } from '../types/user';
+import { User } from "../types/user";
 
 export type Creature = {
   name: string;
   challengeRating: number;
   experience: number;
-  createdBy: User
-  createdAt: Date;
-}
+  createdBy?: User;
+  createdAt?: Date;
+};
 
 export type FullCreature = {
   index: string;
-  name: string
+  name: string;
   size: CreatureSize;
   type: string; // Turn into enum
   alignment: string; // Turn into enum
@@ -39,7 +39,7 @@ export type FullCreature = {
   damage_resistances: [];
   damage_immunities: [];
   condition_immunities: [];
-  senses: { [type: string]: number};
+  senses: { [type: string]: number };
   languages: string;
   challenge_rating: number;
   proficiency_bonus: number;
@@ -48,11 +48,11 @@ export type FullCreature = {
   actions: CreatureAction[];
   image: string;
   url: string;
-  legendary_actions: []
-}
+  legendary_actions: [];
+};
 
 export type CreatureIndex = {
   index: string;
   name: string;
   url: string;
-}
+};
