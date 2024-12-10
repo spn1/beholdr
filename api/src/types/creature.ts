@@ -1,4 +1,4 @@
-import { User } from "../types/user";
+import { CamelizeKeys } from "./utils";
 
 export enum Size {
   TINY = "Tiny",
@@ -63,21 +63,24 @@ export type Sense = {
 };
 
 /**
- * Creature is a subset of FullCreature, which is the information that is actually added to the internal database.
+ * Creature is a subset of ApiCreature, which is the information that is actually added to the internal database.
  */
-export type Creature = Omit<
-  FullCreature,
-  | "proficiencies"
-  | "speed"
-  | "special_abilities"
-  | "actions"
-  | "legendary_actions"
+export type Creature = CamelizeKeys<
+  Omit<
+    ApiCreature,
+    | "index"
+    | "proficiencies"
+    | "speed"
+    | "special_abilities"
+    | "actions"
+    | "legendary_actions"
+  >
 >;
 
 /**
- * FullCreature is the full representation of a creature from the API.
+ * ApiCreature is the full representation of a creature from the API.
  */
-export type FullCreature = {
+export type ApiCreature = {
   index: string;
   name: string;
   size: Size;

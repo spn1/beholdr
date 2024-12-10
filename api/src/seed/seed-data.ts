@@ -1,22 +1,11 @@
 import { KeystoneContext } from "@keystone-6/core/types";
 
 import { TypeInfo } from ".keystone/types";
-import { FullCreature, CreatureIndex, Creature } from "../types/creature";
+import { ApiCreature, Creature } from "../types/creature";
+
+import { selectCreatureData } from "./select-creature-data";
 
 const API_URL = "https://www.dnd5eapi.co/api";
-
-/**
- * Select only data from creature that is used in the database
- * @param creatures An array of creatures from the API
- * @returns An array of creatures containing only data needed for the database
- */
-const selectCreatureData = (creatures: FullCreature[]): Creature[] => {
-  return creatures.map((creature: FullCreature) => ({
-    name: creature.name,
-    challengeRating: creature.challenge_rating,
-    experience: creature.xp,
-  }));
-};
 
 /**
  * Fetches creature data from the DnD API using the specified path.
@@ -25,13 +14,11 @@ const selectCreatureData = (creatures: FullCreature[]): Creature[] => {
  */
 const fetchCreatureDataFromApi = async (
   path: string
-): Promise<FullCreature[]> => {
+): Promise<ApiCreature[]> => {
   const data = await fetch(`${API_URL}${path}`);
   const { results } = await data.json();
 
-  const indexes = results.map(
-    ({ index }: Pick<FullCreature, "index">) => index
-  );
+  const indexes = results.map(({ index }: Pick<ApiCreature, "index">) => index);
   const creatures = await Promise.all(
     indexes.map(async (index) => {
       const data = await fetch(`${API_URL}/monsters/${index}`);
@@ -45,8 +32,11 @@ const fetchCreatureDataFromApi = async (
 export const insertSeedDataFromApi = async (
   context: KeystoneContext<TypeInfo>
 ) => {
-  const creatures = await fetchCreatureDataFromApi("/monsters/?name=bear");
+  const creatures = await fetchCreatureDataFromApi("/monsters/?name=aboleth");
   const reducedCreatures = selectCreatureData(creatures);
+
+  console.log(`🚨 [seed-data.ts] creatures: `, creatures);
+  console.log(`🚨 [seed-data.ts] reducedCreatures: `, reducedCreatures);
 
   // await Promise.all(
   //   reducedCreatures.map(async (creature: Creature) => {
@@ -54,7 +44,7 @@ export const insertSeedDataFromApi = async (
   //   })
   // );
 
-  console.log(`🚨 [seed-data.ts] creatures: `, creatures);
+  console.log(`🚨 [seed-data.ts] creatures: `, creatures.length);
 
   console.log("🌱 Seeded Database! 🌱");
 };

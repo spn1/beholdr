@@ -79,30 +79,26 @@ export const Creature: Lists.Creature = list({
         isRequired: true,
       },
     }),
-    armourClass: integer({
+    armorClass: integer({
       validation: {
         isRequired: true,
         min: 0,
         max: 30,
       },
     }),
-    hit_points: integer({
+    hitPoints: integer({
       validation: {
         isRequired: true,
         min: 0,
         max: 1000,
       },
     }),
-    hit_dice: text({
+    hitDice: text({
       validation: {
         isRequired: false,
       },
     }),
-    speed: text({
-      validation: {
-        isRequired: true,
-      },
-    }),
+    // speed
     strength: integer({
       validation: {
         isRequired: true,

@@ -197,6 +197,21 @@ type Creature {
   name: String
   challengeRating: Float
   experience: Int
+  size: String
+  type: String
+  alignment: String
+  armorClass: Int
+  hitPoints: Int
+  hitDice: String
+  strength: Int
+  dexterity: Int
+  constitution: Int
+  intelligence: Int
+  wisdom: Int
+  charisma: Int
+  languages: String
+  proficiencyBonus: Int
+  url: String
   createdAt: DateTime
   createdBy: User
 }
@@ -213,6 +228,21 @@ input CreatureWhereInput {
   name: StringFilter
   challengeRating: FloatFilter
   experience: IntFilter
+  size: StringNullableFilter
+  type: StringFilter
+  alignment: StringFilter
+  armorClass: IntFilter
+  hitPoints: IntFilter
+  hitDice: StringFilter
+  strength: IntFilter
+  dexterity: IntFilter
+  constitution: IntFilter
+  intelligence: IntFilter
+  wisdom: IntFilter
+  charisma: IntFilter
+  languages: StringFilter
+  proficiencyBonus: IntNullableFilter
+  url: StringFilter
   createdAt: DateTimeNullableFilter
   createdBy: UserWhereInput
 }
@@ -239,11 +269,52 @@ input IntFilter {
   not: IntFilter
 }
 
+input StringNullableFilter {
+  equals: String
+  in: [String!]
+  notIn: [String!]
+  lt: String
+  lte: String
+  gt: String
+  gte: String
+  contains: String
+  startsWith: String
+  endsWith: String
+  mode: QueryMode
+  not: StringNullableFilter
+}
+
+input IntNullableFilter {
+  equals: Int
+  in: [Int!]
+  notIn: [Int!]
+  lt: Int
+  lte: Int
+  gt: Int
+  gte: Int
+  not: IntNullableFilter
+}
+
 input CreatureOrderByInput {
   id: OrderDirection
   name: OrderDirection
   challengeRating: OrderDirection
   experience: OrderDirection
+  size: OrderDirection
+  type: OrderDirection
+  alignment: OrderDirection
+  armorClass: OrderDirection
+  hitPoints: OrderDirection
+  hitDice: OrderDirection
+  strength: OrderDirection
+  dexterity: OrderDirection
+  constitution: OrderDirection
+  intelligence: OrderDirection
+  wisdom: OrderDirection
+  charisma: OrderDirection
+  languages: OrderDirection
+  proficiencyBonus: OrderDirection
+  url: OrderDirection
   createdAt: OrderDirection
 }
 
@@ -251,6 +322,21 @@ input CreatureUpdateInput {
   name: String
   challengeRating: Float
   experience: Int
+  size: String
+  type: String
+  alignment: String
+  armorClass: Int
+  hitPoints: Int
+  hitDice: String
+  strength: Int
+  dexterity: Int
+  constitution: Int
+  intelligence: Int
+  wisdom: Int
+  charisma: Int
+  languages: String
+  proficiencyBonus: Int
+  url: String
   createdAt: DateTime
   createdBy: UserRelateToOneForUpdateInput
 }
@@ -270,6 +356,21 @@ input CreatureCreateInput {
   name: String
   challengeRating: Float
   experience: Int
+  size: String
+  type: String
+  alignment: String
+  armorClass: Int
+  hitPoints: Int
+  hitDice: String
+  strength: Int
+  dexterity: Int
+  constitution: Int
+  intelligence: Int
+  wisdom: Int
+  charisma: Int
+  languages: String
+  proficiencyBonus: Int
+  url: String
   createdAt: DateTime
   createdBy: UserRelateToOneForCreateInput
 }

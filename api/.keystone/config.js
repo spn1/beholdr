@@ -289,6 +289,106 @@ var Creature = (0, import_core3.list)({
         displayMode: "segmented-control"
       }
     }),
+    type: (0, import_fields4.text)({
+      validation: {
+        isRequired: true
+      }
+    }),
+    alignment: (0, import_fields4.text)({
+      validation: {
+        isRequired: true
+      }
+    }),
+    armorClass: (0, import_fields4.integer)({
+      validation: {
+        isRequired: true,
+        min: 0,
+        max: 30
+      }
+    }),
+    hitPoints: (0, import_fields4.integer)({
+      validation: {
+        isRequired: true,
+        min: 0,
+        max: 1e3
+      }
+    }),
+    hitDice: (0, import_fields4.text)({
+      validation: {
+        isRequired: false
+      }
+    }),
+    // speed
+    strength: (0, import_fields4.integer)({
+      validation: {
+        isRequired: true,
+        min: 0,
+        max: 30
+      }
+    }),
+    dexterity: (0, import_fields4.integer)({
+      validation: {
+        isRequired: true,
+        min: 0,
+        max: 30
+      }
+    }),
+    constitution: (0, import_fields4.integer)({
+      validation: {
+        isRequired: true,
+        min: 0,
+        max: 30
+      }
+    }),
+    intelligence: (0, import_fields4.integer)({
+      validation: {
+        isRequired: true,
+        min: 0,
+        max: 30
+      }
+    }),
+    wisdom: (0, import_fields4.integer)({
+      validation: {
+        isRequired: true,
+        min: 0,
+        max: 30
+      }
+    }),
+    charisma: (0, import_fields4.integer)({
+      validation: {
+        isRequired: true,
+        min: 0,
+        max: 30
+      }
+    }),
+    // Proficiencies
+    // damageVulnerabilities
+    // damageResistances
+    // damageImmunities
+    // conditionImmunities
+    // sense
+    languages: (0, import_fields4.text)({
+      validation: {
+        isRequired: false
+      }
+    }),
+    proficiencyBonus: (0, import_fields4.integer)({
+      validation: {
+        isRequired: false,
+        min: 0,
+        max: 10
+      }
+    }),
+    // specialAbilities
+    // actions
+    // image
+    url: (0, import_fields4.text)({
+      validation: {
+        isRequired: false
+      }
+    }),
+    // legendaryAction
+    /** META */
     createdAt: (0, import_fields4.timestamp)({
       ui: {
         createView: {
@@ -438,21 +538,40 @@ var session = (0, import_session.statelessSessions)({
   secret: sessionSecret
 });
 
-// src/seed/seed-data.ts
-var API_URL = "https://www.dnd5eapi.co/api";
+// src/seed/select-creature-data.ts
 var selectCreatureData = (creatures) => {
   return creatures.map((creature) => ({
     name: creature.name,
     challengeRating: creature.challenge_rating,
-    experience: creature.xp
+    experience: creature.xp,
+    type: creature.type,
+    alignment: creature.alignment,
+    armorClass: creature.armor_class,
+    hitPoints: creature.hit_points,
+    hitDice: creature.hit_dice,
+    hitPointsRoll: creature.hit_points_roll,
+    strength: creature.strength,
+    dexterity: creature.dexterity,
+    constitution: creature.constitution,
+    intelligence: creature.intelligence,
+    wisdom: creature.wisdom,
+    charisma: creature.charisma,
+    damageVulnerabilities: creature.damage_vulnerabilities,
+    damageResistances: creature.damage_resistances,
+    damageImmunities: creature.damage_immunities,
+    conditionImmunities: creature.condition_immunities,
+    languages: creature.languages,
+    proficiencyBonus: creature.proficiency_bonus,
+    url: creature.url
   }));
 };
+
+// src/seed/seed-data.ts
+var API_URL = "https://www.dnd5eapi.co/api";
 var fetchCreatureDataFromApi = async (path) => {
   const data = await fetch(`${API_URL}${path}`);
   const { results } = await data.json();
-  const indexes = results.map(
-    ({ index }) => index
-  );
+  const indexes = results.map(({ index }) => index);
   const creatures = await Promise.all(
     indexes.map(async (index) => {
       const data2 = await fetch(`${API_URL}/monsters/${index}`);
@@ -462,9 +581,11 @@ var fetchCreatureDataFromApi = async (path) => {
   return creatures;
 };
 var insertSeedDataFromApi = async (context) => {
-  const creatures = await fetchCreatureDataFromApi("/monsters/?name=bear");
+  const creatures = await fetchCreatureDataFromApi("/monsters/?name=aboleth");
   const reducedCreatures = selectCreatureData(creatures);
   console.log(`\u{1F6A8} [seed-data.ts] creatures: `, creatures);
+  console.log(`\u{1F6A8} [seed-data.ts] reducedCreatures: `, reducedCreatures);
+  console.log(`\u{1F6A8} [seed-data.ts] creatures: `, creatures.length);
   console.log("\u{1F331} Seeded Database! \u{1F331}");
 };
 

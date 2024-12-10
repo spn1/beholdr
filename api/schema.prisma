@@ -39,6 +39,21 @@ model Creature {
   name                        String         @default("")
   challengeRating             Float          @default(0)
   experience                  Int            @default(0)
+  size                        String?
+  type                        String         @default("")
+  alignment                   String         @default("")
+  armorClass                  Int
+  hitPoints                   Int
+  hitDice                     String         @default("")
+  strength                    Int
+  dexterity                   Int
+  constitution                Int
+  intelligence                Int
+  wisdom                      Int
+  charisma                    Int
+  languages                   String         @default("")
+  proficiencyBonus            Int?
+  url                         String         @default("")
   createdAt                   DateTime?      @default(now())
   createdBy                   User?          @relation("Creature_createdBy", fields: [createdById], references: [id])
   createdById                 String?        @map("createdBy") @postgresql.Uuid
