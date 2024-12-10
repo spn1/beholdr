@@ -29,6 +29,10 @@ const fetchCreatureDataFromApi = async (
   return creatures;
 };
 
+/**
+ * Fetches creature information from the DnD 5e API and inserts it into the database
+ * @param context KeystoneContext
+ */
 export const insertSeedDataFromApi = async (
   context: KeystoneContext<TypeInfo>
 ) => {

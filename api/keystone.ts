@@ -1,3 +1,4 @@
+import "dotenv/config";
 import { config } from "@keystone-6/core";
 
 import { lists } from "./src/schema/schema";
@@ -15,7 +16,7 @@ export default withAuth(
       provider: "postgresql",
       url: databaseUrl,
       onConnect: async (context: KeystoneContext<TypeInfo>) => {
-        console.log("💾 Database Connection Established 💾");
+        console.log(`💾 Database Connection Established 💾`);
         if (process.argv.includes("--seed-data-from-api")) {
           console.log("🌱 Seeding Database 🌱");
           await insertSeedDataFromApi(context);

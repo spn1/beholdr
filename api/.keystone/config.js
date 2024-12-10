@@ -22,6 +22,7 @@ __export(keystone_exports, {
   default: () => keystone_default
 });
 module.exports = __toCommonJS(keystone_exports);
+var import_config = require("dotenv/config");
 var import_core6 = require("@keystone-6/core");
 
 // src/schema/models/user.ts
@@ -597,7 +598,7 @@ var keystone_default = withAuth(
       provider: "postgresql",
       url: databaseUrl,
       onConnect: async (context) => {
-        console.log("\u{1F4BE} Database Connection Established \u{1F4BE}");
+        console.log(`\u{1F4BE} Database Connection Established \u{1F4BE}`);
         if (process.argv.includes("--seed-data-from-api")) {
           console.log("\u{1F331} Seeding Database \u{1F331}");
           await insertSeedDataFromApi(context);
