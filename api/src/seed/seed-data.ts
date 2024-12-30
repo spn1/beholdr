@@ -36,19 +36,14 @@ const fetchCreatureDataFromApi = async (
 export const insertSeedDataFromApi = async (
   context: KeystoneContext<TypeInfo>
 ) => {
-  const creatures = await fetchCreatureDataFromApi("/monsters/?name=aboleth");
+  const creatures = await fetchCreatureDataFromApi("/monsters");
   const reducedCreatures = selectCreatureData(creatures);
 
-  console.log(`🚨 [seed-data.ts] creatures: `, creatures);
-  console.log(`🚨 [seed-data.ts] reducedCreatures: `, reducedCreatures);
-
-  // await Promise.all(
-  //   reducedCreatures.map(async (creature: Creature) => {
-  //     await context.query.Creature.createOne({ data: creature });
-  //   })
-  // );
-
-  console.log(`🚨 [seed-data.ts] creatures: `, creatures.length);
+  await Promise.all(
+    reducedCreatures.map(async (creature: Creature) => {
+      await context.query.Creature.createOne({ data: creature });
+    })
+  );
 
   console.log("🌱 Seeded Database! 🌱");
 };

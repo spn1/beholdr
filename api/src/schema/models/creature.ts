@@ -1,4 +1,4 @@
-import { list } from "@keystone-6/core";
+import { list, group } from "@keystone-6/core";
 import {
   text,
   integer,
@@ -6,12 +6,12 @@ import {
   timestamp,
   relationship,
   select,
+  json,
 } from "@keystone-6/core/fields";
 
 import type { Lists } from ".keystone/types";
 import {
   filterAccessControlRules,
-  operationAccessControlRules,
   itemAccessControlRules,
   permissions,
 } from "../../auth/access-control";
@@ -79,12 +79,8 @@ export const Creature: Lists.Creature = list({
         isRequired: true,
       },
     }),
-    armorClass: integer({
-      validation: {
-        isRequired: true,
-        min: 0,
-        max: 30,
-      },
+    armorClass: json({
+      defaultValue: [{}],
     }),
     hitPoints: integer({
       validation: {
@@ -94,6 +90,11 @@ export const Creature: Lists.Creature = list({
       },
     }),
     hitDice: text({
+      validation: {
+        isRequired: false,
+      },
+    }),
+    hitPointsRoll: text({
       validation: {
         isRequired: false,
       },
@@ -142,10 +143,18 @@ export const Creature: Lists.Creature = list({
       },
     }),
     // Proficiencies
-    // damageVulnerabilities
-    // damageResistances
-    // damageImmunities
-    // conditionImmunities
+    damageVulnerabilities: json({
+      defaultValue: [],
+    }),
+    damageResistances: json({
+      defaultValue: [],
+    }),
+    damageImmunities: json({
+      defaultValue: [],
+    }),
+    conditionImmunities: json({
+      defaultValue: [],
+    }),
     // sense
     languages: text({
       validation: {

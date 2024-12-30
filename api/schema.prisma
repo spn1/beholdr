@@ -42,15 +42,20 @@ model Creature {
   size                        String?
   type                        String         @default("")
   alignment                   String         @default("")
-  armorClass                  Int
+  armorClass                  Json?          @default("[{}]")
   hitPoints                   Int
   hitDice                     String         @default("")
+  hitPointsRoll               String         @default("")
   strength                    Int
   dexterity                   Int
   constitution                Int
   intelligence                Int
   wisdom                      Int
   charisma                    Int
+  damageVulnerabilities       Json?          @default("[]")
+  damageResistances           Json?          @default("[]")
+  damageImmunities            Json?          @default("[]")
+  conditionImmunities         Json?          @default("[]")
   languages                   String         @default("")
   proficiencyBonus            Int?
   url                         String         @default("")

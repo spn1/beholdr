@@ -300,12 +300,8 @@ var Creature = (0, import_core3.list)({
         isRequired: true
       }
     }),
-    armorClass: (0, import_fields4.integer)({
-      validation: {
-        isRequired: true,
-        min: 0,
-        max: 30
-      }
+    armorClass: (0, import_fields4.json)({
+      defaultValue: [{}]
     }),
     hitPoints: (0, import_fields4.integer)({
       validation: {
@@ -315,6 +311,11 @@ var Creature = (0, import_core3.list)({
       }
     }),
     hitDice: (0, import_fields4.text)({
+      validation: {
+        isRequired: false
+      }
+    }),
+    hitPointsRoll: (0, import_fields4.text)({
       validation: {
         isRequired: false
       }
@@ -363,10 +364,18 @@ var Creature = (0, import_core3.list)({
       }
     }),
     // Proficiencies
-    // damageVulnerabilities
-    // damageResistances
-    // damageImmunities
-    // conditionImmunities
+    damageVulnerabilities: (0, import_fields4.json)({
+      defaultValue: []
+    }),
+    damageResistances: (0, import_fields4.json)({
+      defaultValue: []
+    }),
+    damageImmunities: (0, import_fields4.json)({
+      defaultValue: []
+    }),
+    conditionImmunities: (0, import_fields4.json)({
+      defaultValue: []
+    }),
     // sense
     languages: (0, import_fields4.text)({
       validation: {
@@ -527,11 +536,10 @@ var { withAuth } = (0, import_auth.createAuth)({
   listKey: "User",
   identityField: "email",
   sessionData: `id name createdAt role { ${permissionsList.join(" ")} }`,
-  secretField: "password"
-  // initFirstItem: {
-  //   fields: ['name', 'email', 'password'],
-  //   // you shouldn't use this in production
-  // },
+  secretField: "password",
+  initFirstItem: {
+    fields: ["name", "email", "password"]
+  }
 });
 var sessionMaxAge = 60 * 60 * 24 * 30;
 var session = (0, import_session.statelessSessions)({
@@ -582,11 +590,13 @@ var fetchCreatureDataFromApi = async (path) => {
   return creatures;
 };
 var insertSeedDataFromApi = async (context) => {
-  const creatures = await fetchCreatureDataFromApi("/monsters/?name=aboleth");
+  const creatures = await fetchCreatureDataFromApi("/monsters");
   const reducedCreatures = selectCreatureData(creatures);
-  console.log(`\u{1F6A8} [seed-data.ts] creatures: `, creatures);
-  console.log(`\u{1F6A8} [seed-data.ts] reducedCreatures: `, reducedCreatures);
-  console.log(`\u{1F6A8} [seed-data.ts] creatures: `, creatures.length);
+  await Promise.all(
+    reducedCreatures.map(async (creature) => {
+      await context.query.Creature.createOne({ data: creature });
+    })
+  );
   console.log("\u{1F331} Seeded Database! \u{1F331}");
 };
 
@@ -612,7 +622,8 @@ var keystone_default = withAuth(
     server: {
       cors: {
         credentials: true
-      }
+      },
+      port: parseInt(process.env.PORT)
     }
   })
 );

@@ -31,6 +31,7 @@ export default withAuth(
       cors: {
         credentials: true,
       },
+      port: parseInt(process.env.PORT),
     },
   })
 );

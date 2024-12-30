@@ -200,15 +200,20 @@ type Creature {
   size: String
   type: String
   alignment: String
-  armorClass: Int
+  armorClass: JSON
   hitPoints: Int
   hitDice: String
+  hitPointsRoll: String
   strength: Int
   dexterity: Int
   constitution: Int
   intelligence: Int
   wisdom: Int
   charisma: Int
+  damageVulnerabilities: JSON
+  damageResistances: JSON
+  damageImmunities: JSON
+  conditionImmunities: JSON
   languages: String
   proficiencyBonus: Int
   url: String
@@ -231,9 +236,9 @@ input CreatureWhereInput {
   size: StringNullableFilter
   type: StringFilter
   alignment: StringFilter
-  armorClass: IntFilter
   hitPoints: IntFilter
   hitDice: StringFilter
+  hitPointsRoll: StringFilter
   strength: IntFilter
   dexterity: IntFilter
   constitution: IntFilter
@@ -303,9 +308,9 @@ input CreatureOrderByInput {
   size: OrderDirection
   type: OrderDirection
   alignment: OrderDirection
-  armorClass: OrderDirection
   hitPoints: OrderDirection
   hitDice: OrderDirection
+  hitPointsRoll: OrderDirection
   strength: OrderDirection
   dexterity: OrderDirection
   constitution: OrderDirection
@@ -325,15 +330,20 @@ input CreatureUpdateInput {
   size: String
   type: String
   alignment: String
-  armorClass: Int
+  armorClass: JSON
   hitPoints: Int
   hitDice: String
+  hitPointsRoll: String
   strength: Int
   dexterity: Int
   constitution: Int
   intelligence: Int
   wisdom: Int
   charisma: Int
+  damageVulnerabilities: JSON
+  damageResistances: JSON
+  damageImmunities: JSON
+  conditionImmunities: JSON
   languages: String
   proficiencyBonus: Int
   url: String
@@ -359,15 +369,20 @@ input CreatureCreateInput {
   size: String
   type: String
   alignment: String
-  armorClass: Int
+  armorClass: JSON
   hitPoints: Int
   hitDice: String
+  hitPointsRoll: String
   strength: Int
   dexterity: Int
   constitution: Int
   intelligence: Int
   wisdom: Int
   charisma: Int
+  damageVulnerabilities: JSON
+  damageResistances: JSON
+  damageImmunities: JSON
+  conditionImmunities: JSON
   languages: String
   proficiencyBonus: Int
   url: String
@@ -527,6 +542,7 @@ type Mutation {
   deleteEncounters(where: [EncounterWhereUniqueInput!]!): [Encounter]
   endSession: Boolean!
   authenticateUserWithPassword(email: String!, password: String!): UserAuthenticationWithPasswordResult
+  createInitialUser(data: CreateInitialUserInput!): UserAuthenticationWithPasswordSuccess!
 }
 
 union UserAuthenticationWithPasswordResult = UserAuthenticationWithPasswordSuccess | UserAuthenticationWithPasswordFailure
@@ -538,6 +554,12 @@ type UserAuthenticationWithPasswordSuccess {
 
 type UserAuthenticationWithPasswordFailure {
   message: String!
+}
+
+input CreateInitialUserInput {
+  name: String
+  email: String
+  password: String
 }
 
 type Query {
