@@ -69,8 +69,11 @@ export default function Creatures() {
         </Form>
         <CircularProgress aria-hidden hidden={!searching} id="search-spinner" />
       </Box>
-      <Box component="section">
-        <p>Count: {count}</p>
+      <Box
+        component="section"
+        sx={{ display: "flex", flexDirection: "column" }}
+      >
+        <Typography>Count: {count}</Typography>
         {results.map(({ index, name }: { name: string; index: string }) => (
           <Link to={`/creatures/${index}`} key={index}>
             {name}
