@@ -1,7 +1,6 @@
 import { Box, Typography, Divider, Grid2 as Grid } from "@mui/material";
-import { Link } from "react-router";
 import type { Route } from "./+types/home";
-import { Card } from "../components/home/card";
+import { Card } from "~/components/home/card";
 
 export function meta({}: Route.MetaArgs) {
   return [
