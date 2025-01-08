@@ -1,14 +1,14 @@
-import AutoAwesomeIcon from "@mui/icons-material/AutoAwesome";
 import {
   Container,
   ThemeProvider,
   AppBar,
   Toolbar,
-  IconButton,
+  Switch,
   Typography,
   Button,
+  Box,
 } from "@mui/material";
-import { Outlet } from "react-router";
+import { Link, Outlet } from "react-router";
 
 import { useTheme } from "~/hooks/useTheme";
 
@@ -18,14 +18,17 @@ export default function PageContainer() {
   return (
     <ThemeProvider theme={theme}>
       <AppBar position="static">
-        <Toolbar>
-          <IconButton size="large" edge="start">
-            {/* <AutoAwesome /> */}
-          </IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Beholdr
+        <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
+          <Typography variant="h6" component="div">
+            <Link to="/">Beholdr</Link>
           </Typography>
-          <Button color="inherit">Login</Button>
+          <Box>
+            <Switch
+              onChange={toggleTheme}
+              checked={theme.palette.mode === "dark"}
+            />
+            <Button color="inherit">Login</Button>
+          </Box>
         </Toolbar>
       </AppBar>
       <Container maxWidth="lg">

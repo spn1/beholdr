@@ -11,8 +11,6 @@ import { CssBaseline } from "@mui/material";
 import type { Route } from "./+types/root";
 import stylesheet from "./styles/app.css?url";
 
-import { useTheme } from "./hooks/useTheme";
-
 export const links: Route.LinksFunction = () => [
   { rel: "preconnect", href: "https://fonts.googleapis.com" },
   {
@@ -64,6 +62,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </body>
     </html>
   );
+}
+
+export function HydrateFallback() {
+  return <p>Loading...</p>;
 }
 
 export default function App() {
