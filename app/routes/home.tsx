@@ -1,6 +1,11 @@
-import { Box, Typography, Divider, Grid2 as Grid } from "@mui/material";
+import { Box, Typography, Divider, Grid2 as Grid, Link } from "@mui/material";
 import type { Route } from "./+types/home";
 import { Card } from "~/components/home/card";
+/**
+ * Metadata for page
+ * @param param0
+ * @returns Array of metadata objects
+ */
 
 export function meta({}: Route.MetaArgs) {
   return [

@@ -1,6 +1,6 @@
 import React from "react";
-import { Link } from "react-router";
-import { Card as MuiCard } from "@mui/material";
+import { Link as RouterLink } from "react-router";
+import { Card as MuiCard, Link } from "@mui/material";
 
 export type CardProps = {
   to: string;
@@ -9,7 +9,7 @@ export type CardProps = {
 
 export function Card({ to, children }: CardProps) {
   return (
-    <Link to={to} className="size-full">
+    <Link component={RouterLink} to={to} className="size-full">
       <MuiCard
         sx={{
           display: "flex",

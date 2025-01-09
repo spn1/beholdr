@@ -8,8 +8,9 @@ import {
   Button,
   Box,
   CssBaseline,
+  Link,
 } from "@mui/material";
-import { Link, Outlet } from "react-router";
+import { Link as RouterLink, Outlet } from "react-router";
 
 import { useTheme } from "~/hooks/useTheme";
 
@@ -22,7 +23,9 @@ export default function PageContainer() {
       <AppBar position="static">
         <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
           <Typography variant="h6" component="div">
-            <Link to="/">Beholdr</Link>
+            <Link component={RouterLink} to="/">
+              Beholdr
+            </Link>
           </Typography>
           <Box>
             <Switch
@@ -34,7 +37,9 @@ export default function PageContainer() {
         </Toolbar>
       </AppBar>
       <Container maxWidth="lg">
-        <Outlet />
+        <Box>
+          <Outlet />
+        </Box>
       </Container>
     </ThemeProvider>
   );

@@ -1,13 +1,29 @@
 import { useRef, useEffect } from "react";
 import { Box, Typography, TextField, CircularProgress } from "@mui/material";
+import { DataGrid } from "@mui/x-data-grid";
 import {
   Form,
   useLoaderData,
   useNavigation,
   useSubmit,
-  Link,
+  Link as RouterLink,
 } from "react-router";
 import type { Route } from "./+types/creatures";
+
+import { CREATURES_QUERY } from "~/graphql/creatures";
+import type { GridColDef } from "@mui/x-data-grid";
+
+export function meta({}: Route.MetaArgs) {
+  return [
+    { title: "Beholdr | Creatures" },
+    { name: "description", content: "Dungeons and Dragons Creatures" },
+  ];
+}
+
+const CREATURE_COLUMNS: GridColDef[] = [
+  { field: "name", headerName: "Name", flex: 2 },
+  { field: "challenge_rating", headerName: "Challenge Rating", flex: 1 },
+];
 
 /**
  * Loads the list of all the creatures
@@ -17,19 +33,22 @@ import type { Route } from "./+types/creatures";
 export async function loader({ request }: Route.LoaderArgs) {
   const url = new URL(request.url);
   const q = url.searchParams.get("q");
-  const apiUrl = q
-    ? `https://www.dnd5eapi.co/api/monsters/?name=${q}`
-    : `https://www.dnd5eapi.co/api/monsters`;
 
-  const response = await fetch(apiUrl);
-  const data = await response.json();
+  const API_URL = `https://www.dnd5eapi.co/graphql`;
+  const response = await fetch(API_URL, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(CREATURES_QUERY({ name: q })),
+  });
+
+  const { data } = await response.json();
 
   return { data, q };
 }
 
 export default function Creatures() {
   const {
-    data: { count, results = [] },
+    data: { monsters = [] },
     q,
   } = useLoaderData();
   const navigation = useNavigation();
@@ -76,14 +95,20 @@ export default function Creatures() {
       </Box>
       <Box
         component="section"
-        sx={{ display: "flex", flexDirection: "column" }}
+        sx={{
+          display: "flex",
+          flexDirection: "column",
+        }}
       >
-        <Typography>Count: {count}</Typography>
-        {results.map(({ index, name }: { name: string; index: string }) => (
-          <Link to={`/creatures/${index}`} key={index}>
-            {name}
-          </Link>
-        ))}
+        <DataGrid
+          rows={monsters.map(({ index, ...monster }) => ({
+            id: index,
+            index,
+            ...monster,
+          }))}
+          columns={CREATURE_COLUMNS}
+          disableRowSelectionOnClick
+        />
       </Box>
     </Box>
   );
