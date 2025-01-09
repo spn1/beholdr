@@ -6,7 +6,6 @@ import {
   Scripts,
   ScrollRestoration,
 } from "react-router";
-import { CssBaseline } from "@mui/material";
 
 import type { Route } from "./+types/root";
 import stylesheet from "./styles/app.css?url";
@@ -71,7 +70,6 @@ export function HydrateFallback() {
 export default function App() {
   return (
     <>
-      <CssBaseline enableColorScheme />
       <Outlet />
     </>
   );

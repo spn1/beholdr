@@ -7,6 +7,7 @@ import {
   Typography,
   Button,
   Box,
+  CssBaseline,
 } from "@mui/material";
 import { Link, Outlet } from "react-router";
 
@@ -17,6 +18,7 @@ export default function PageContainer() {
 
   return (
     <ThemeProvider theme={theme}>
+      <CssBaseline enableColorScheme />
       <AppBar position="static">
         <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
           <Typography variant="h6" component="div">

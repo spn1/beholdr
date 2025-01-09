@@ -22,14 +22,18 @@ export const darkTheme = createTheme({
   palette: {
     mode: "dark",
     primary: {
-      main: "#2a9d90",
+      main: "#2ec4b6",
     },
     secondary: {
-      main: "#e8c468",
+      main: "#ff9f1c",
     },
     background: {
-      default: "#292c33",
+      default: "#121212",
+      paper: "#121212",
     },
+  },
+  colorSchemes: {
+    dark: true,
   },
 });
 

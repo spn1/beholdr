@@ -58,16 +58,21 @@ export default function Creatures() {
           onSubmit={(event) => submit(event.currentTarget)}
         >
           <TextField
-            id="search-field"
+            id="q"
             name="q"
             label="Search"
             type="search"
             variant="filled"
+            disabled={searching}
             defaultValue={q || ""}
             ref={searchInputRef}
           />
         </Form>
-        <CircularProgress aria-hidden hidden={!searching} id="search-spinner" />
+        <CircularProgress
+          aria-hidden
+          sx={{ display: searching ? "block" : "none" }}
+          id="search-spinner"
+        />
       </Box>
       <Box
         component="section"
