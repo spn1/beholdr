@@ -65,15 +65,24 @@ export default function Creatures() {
   }, []);
 
   return (
-    <Box component="main">
+    <Box
+      component="main"
+      sx={{ display: "flex", flexDirection: "column", gap: 2 }}
+    >
       <Typography variant="h1">Creatures</Typography>
       <Box
         component="section"
-        sx={{ display: "flex", gap: 2, alignItems: "center" }}
+        sx={{
+          display: "flex",
+          gap: 2,
+          justifyContent: "stretch",
+          alignItems: "center",
+        }}
       >
         <Form
           id="search-form"
           role="search"
+          className="w-full"
           onSubmit={(event) => submit(event.currentTarget)}
         >
           <TextField
@@ -85,6 +94,7 @@ export default function Creatures() {
             disabled={searching}
             defaultValue={q || ""}
             ref={searchInputRef}
+            fullWidth
           />
         </Form>
         <CircularProgress
