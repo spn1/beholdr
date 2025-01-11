@@ -1,17 +1,12 @@
-import { useRef, useEffect } from "react";
+import { useRef, useEffect, useMemo } from "react";
 import { Box, Typography, TextField, LinearProgress } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
-import {
-  Form,
-  useLoaderData,
-  useNavigation,
-  useSubmit,
-  Link as RouterLink,
-} from "react-router";
+import { Form, useLoaderData, useNavigation, useSubmit } from "react-router";
+import type { GridColDef } from "@mui/x-data-grid";
 import type { Route } from "./+types/creatures";
 
-import { CREATURES_QUERY } from "~/graphql/creatures";
-import type { GridColDef } from "@mui/x-data-grid";
+import { Table } from "~/components/shared/table";
+import { fetchData } from "~/services/dnd-api";
+import { getCreaturesQuery } from "~/graphql/creatures";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -25,28 +20,17 @@ const CREATURE_COLUMNS: GridColDef[] = [
   { field: "challenge_rating", headerName: "Challenge Rating", flex: 1 },
 ];
 
-/**
- * Loads the list of all the creatures
- * @param loaderFunctionArgs
- * @returns Data from api response
- */
-export async function loader({ request }: Route.LoaderArgs) {
+export const loader = async ({ request }: Route.LoaderArgs) => {
   const url = new URL(request.url);
   const q = url.searchParams.get("q");
+  const query = getCreaturesQuery({ name: q });
 
-  const API_URL = `https://www.dnd5eapi.co/graphql`;
-  const response = await fetch(API_URL, {
-    method: "POST",
-    headers: { "Content-Type": "application/json" },
-    body: JSON.stringify(CREATURES_QUERY({ name: q })),
-  });
-
-  const { data } = await response.json();
+  const { data } = await fetchData(query);
 
   return { data, q };
-}
+};
 
-export default function Creatures() {
+export default () => {
   const {
     data: { monsters = [] },
     q,
@@ -54,15 +38,23 @@ export default function Creatures() {
   const navigation = useNavigation();
   const submit = useSubmit();
   const searchInputRef = useRef<HTMLInputElement>(null);
-  const searching =
-    navigation.location &&
-    new URLSearchParams(navigation.location.search).has("q");
+  const searching = navigation.location
+    ? new URLSearchParams(navigation.location.search).has("q")
+    : false;
 
   useEffect(() => {
     if (searchInputRef?.current) {
       searchInputRef.current.value = q || "";
     }
   }, []);
+
+  const rows = useMemo(() => {
+    return monsters.map(({ index, ...monster }) => ({
+      id: index,
+      index,
+      ...monster,
+    }));
+  }, [monsters]);
 
   return (
     <Box
@@ -111,16 +103,8 @@ export default function Creatures() {
           flexDirection: "column",
         }}
       >
-        <DataGrid
-          rows={monsters.map(({ index, ...monster }) => ({
-            id: index,
-            index,
-            ...monster,
-          }))}
-          columns={CREATURE_COLUMNS}
-          disableRowSelectionOnClick
-        />
+        <Table rows={rows} columns={CREATURE_COLUMNS} loading={searching} />
       </Box>
     </Box>
   );
-}
+};
