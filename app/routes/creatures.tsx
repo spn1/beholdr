@@ -1,5 +1,5 @@
 import { useRef, useEffect } from "react";
-import { Box, Typography, TextField, CircularProgress } from "@mui/material";
+import { Box, Typography, TextField, LinearProgress } from "@mui/material";
 import { DataGrid } from "@mui/x-data-grid";
 import {
   Form,
@@ -74,6 +74,7 @@ export default function Creatures() {
         component="section"
         sx={{
           display: "flex",
+          flexDirection: "column",
           gap: 2,
           justifyContent: "stretch",
           alignItems: "center",
@@ -96,12 +97,12 @@ export default function Creatures() {
             ref={searchInputRef}
             fullWidth
           />
+          <LinearProgress
+            aria-hidden
+            sx={{ display: searching ? "block" : "none" }}
+            id="loading-bar"
+          />
         </Form>
-        <CircularProgress
-          aria-hidden
-          sx={{ display: searching ? "block" : "none" }}
-          id="search-spinner"
-        />
       </Box>
       <Box
         component="section"

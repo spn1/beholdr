@@ -1,4 +1,4 @@
-import type { Variables } from "~/types/gql";
+import type { Variables } from "~/types/graphql";
 
 export const CREATURES_QUERY = (variables: Variables) => ({
   query: `query Creatures($name: String) {
