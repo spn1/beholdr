@@ -11,8 +11,10 @@ import type { GridColDef } from "@mui/x-data-grid";
 import type { Route } from "./+types/creatures";
 
 import { DataTable } from "~/components/shared/data-table";
-import { fetchData } from "~/services/dnd-api";
+import { fetchData } from "~/services/dnd-5e-service";
 import { getCreaturesQuery } from "~/graphql/creatures";
+import { CreatureTable } from "~/components/creatures/creature-table";
+import { SearchInput } from "~/components/shared/search-input";
 
 export function meta({}: Route.MetaArgs) {
   return [
@@ -21,11 +23,11 @@ export function meta({}: Route.MetaArgs) {
   ];
 }
 
-const CREATURE_COLUMNS: GridColDef[] = [
-  { field: "name", headerName: "Name", flex: 2 },
-  { field: "challenge_rating", headerName: "Challenge Rating", flex: 1 },
-];
-
+/**
+ * Loads sample data for all the creatures from the API
+ * @param param0 Loader arguments
+ * @returns The data from the API call and the query
+ */
 export const loader = async ({ request }: Route.LoaderArgs) => {
   const url = new URL(request.url);
   const q = url.searchParams.get("q");
@@ -38,7 +40,7 @@ export const loader = async ({ request }: Route.LoaderArgs) => {
 
 export default () => {
   const {
-    data: { monsters = [] },
+    data: { monsters: creatures = [] },
     q,
   } = useLoaderData();
   const navigation = useNavigation();
@@ -53,14 +55,6 @@ export default () => {
       searchInputRef.current.value = q || "";
     }
   }, []);
-
-  const rows = useMemo(() => {
-    return monsters.map(({ index, ...monster }) => ({
-      id: index,
-      index,
-      ...monster,
-    }));
-  }, [monsters]);
 
   return (
     <Box
@@ -78,7 +72,14 @@ export default () => {
           alignItems: "center",
         }}
       >
-        <Form
+        <SearchInput
+          searchInputRef={searchInputRef}
+          searching={searching}
+          searchKey={"q"}
+          submit={submit}
+          defaultValue={q || ""}
+        />
+        {/* <Form
           id="search-form"
           role="search"
           className="w-full"
@@ -100,9 +101,10 @@ export default () => {
             sx={{ display: searching ? "block" : "none" }}
             id="loading-bar"
           />
-        </Form>
+        </Form> */}
       </Box>
-      <Box component="section">
+      <CreatureTable creatures={creatures} searching={searching} />
+      {/* <Box component="section">
         <Box width={1}>
           <DataTable
             rows={rows}
@@ -110,7 +112,7 @@ export default () => {
             loading={searching}
           />
         </Box>
-      </Box>
+      </Box> */}
     </Box>
   );
 };

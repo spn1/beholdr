@@ -1,9 +1,10 @@
-import { Box, Typography } from "@mui/material";
+import { Paper, Box, Typography, Divider } from "@mui/material";
 import { useLoaderData } from "react-router";
 import type { Route } from "./+types/creature";
 
 import { getCreatureQuery } from "~/graphql/creature";
-import { fetchData } from "~/services/dnd-api";
+import { fetchData } from "~/services/dnd-5e-service";
+import { CreatureCard } from "~/components/creature/creature-card";
 
 /**
  * Loads the specified creature in the url param
@@ -30,14 +31,12 @@ export async function clientLoader({ params }: Route.LoaderArgs) {
   return { creature: monster };
 }
 
+/**
+ * Root page of /creatures/:index
+ * Fetches the data and passes it to display component
+ */
 export default () => {
   const { creature } = useLoaderData();
 
-  console.log("[creature] data:", creature);
-
-  return (
-    <Box component="main">
-      <Typography variant="h2">{creature.name}</Typography>
-    </Box>
-  );
+  return <CreatureCard creature={creature} />;
 };
