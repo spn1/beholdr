@@ -13,6 +13,7 @@ import {
 import { Link as RouterLink, Outlet } from "react-router";
 
 import { useTheme } from "~/hooks/useTheme";
+import { ThemeSwitch } from "~/components/layout/theme-switcher";
 
 export default function PageContainer() {
   const { theme, toggleTheme } = useTheme();
@@ -28,11 +29,11 @@ export default function PageContainer() {
             </Link>
           </Typography>
           <Box>
-            <Switch
+            <ThemeSwitch
               onChange={toggleTheme}
               checked={theme.palette.mode === "dark"}
             />
-            <Button color="inherit">Login</Button>
+            {/* <Button color="inherit">Login</Button> */}
           </Box>
         </Toolbar>
       </AppBar>

@@ -1,10 +1,16 @@
 import { useRef, useEffect, useMemo } from "react";
 import { Box, Typography, TextField, LinearProgress } from "@mui/material";
-import { Form, useLoaderData, useNavigation, useSubmit } from "react-router";
+import {
+  Form,
+  useLoaderData,
+  useNavigation,
+  useSubmit,
+  Outlet,
+} from "react-router";
 import type { GridColDef } from "@mui/x-data-grid";
 import type { Route } from "./+types/creatures";
 
-import { Table } from "~/components/shared/table";
+import { DataTable } from "~/components/shared/data-table";
 import { fetchData } from "~/services/dnd-api";
 import { getCreaturesQuery } from "~/graphql/creatures";
 
@@ -100,10 +106,21 @@ export default () => {
         component="section"
         sx={{
           display: "flex",
-          flexDirection: "column",
+          flexDirection: "row",
+          justifyContent: "space-evenly",
+          gap: 2,
         }}
       >
-        <Table rows={rows} columns={CREATURE_COLUMNS} loading={searching} />
+        <Box width={1 / 2}>
+          <DataTable
+            rows={rows}
+            columns={CREATURE_COLUMNS}
+            loading={searching}
+          />
+        </Box>
+        <Box width={1 / 2}>
+          <Outlet />
+        </Box>
       </Box>
     </Box>
   );

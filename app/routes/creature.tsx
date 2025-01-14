@@ -7,7 +7,7 @@ import type { Route } from "./+types/creature";
  * @param loaderFunctionArgs
  * @returns Data from api response
  */
-export async function loader({ params }: Route.LoaderArgs) {
+export async function clientLoader({ params }: Route.LoaderArgs) {
   const { creature } = params;
 
   if (!creature || creature.length === 0) {
@@ -19,7 +19,7 @@ export async function loader({ params }: Route.LoaderArgs) {
   );
 
   if (!response.ok) {
-    throw new Response("Not Found", { status: 404 });
+    throw new Response("Error", { status: 404 });
   }
 
   const data = await response.json();
@@ -37,7 +37,6 @@ export default function Creatures() {
   return (
     <Box component="main">
       <Typography variant="h2">{data.name}</Typography>
-      <pre>{JSON.stringify(data, null, 5)}</pre>
     </Box>
   );
 }

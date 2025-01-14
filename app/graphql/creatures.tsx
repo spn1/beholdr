@@ -14,6 +14,7 @@ export const getCreaturesQuery = (variables: Variables): Query => ({
       index
       name
       challenge_rating
+      image
     }
   }`,
   variables,
