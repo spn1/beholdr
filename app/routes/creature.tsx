@@ -2,6 +2,9 @@ import { Box, Typography } from "@mui/material";
 import { useLoaderData } from "react-router";
 import type { Route } from "./+types/creature";
 
+import { getCreatureQuery } from "~/graphql/creature";
+import { fetchData } from "~/services/dnd-api";
+
 /**
  * Loads the specified creature in the url param
  * @param loaderFunctionArgs
@@ -14,29 +17,27 @@ export async function clientLoader({ params }: Route.LoaderArgs) {
     throw new Response("Not Found", { status: 404 });
   }
 
-  const response = await fetch(
-    `https://www.dnd5eapi.co/api/monsters/${creature}`
-  );
+  const query = getCreatureQuery({ index: creature });
+  const {
+    data: { monster },
+    status,
+  } = await fetchData(query);
 
-  if (!response.ok) {
-    throw new Response("Error", { status: 404 });
+  if (status !== 200) {
+    throw new Response(" Error", { status });
   }
 
-  const data = await response.json();
-
-  if (!data.index) {
-    throw new Response("Not Found", { status: 404 });
-  }
-
-  return { data };
+  return { creature: monster };
 }
 
-export default function Creatures() {
-  const { data } = useLoaderData();
+export default () => {
+  const { creature } = useLoaderData();
+
+  console.log("[creature] data:", creature);
 
   return (
     <Box component="main">
-      <Typography variant="h2">{data.name}</Typography>
+      <Typography variant="h2">{creature.name}</Typography>
     </Box>
   );
-}
+};

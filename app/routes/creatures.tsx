@@ -102,24 +102,13 @@ export default () => {
           />
         </Form>
       </Box>
-      <Box
-        component="section"
-        sx={{
-          display: "flex",
-          flexDirection: "row",
-          justifyContent: "space-evenly",
-          gap: 2,
-        }}
-      >
-        <Box width={1 / 2}>
+      <Box component="section">
+        <Box width={1}>
           <DataTable
             rows={rows}
             columns={CREATURE_COLUMNS}
             loading={searching}
           />
-        </Box>
-        <Box width={1 / 2}>
-          <Outlet />
         </Box>
       </Box>
     </Box>
