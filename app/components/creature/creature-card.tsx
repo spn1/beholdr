@@ -1,29 +1,28 @@
-import { Box, Typography, Paper, Divider } from "@mui/material";
+import { Box, Typography, Paper, Divider, Grid2 as Grid } from "@mui/material";
+import { CreatureAttributes } from "./creature-attributes";
+import { CreatureProficiencies } from "./creature-proficiencies";
+import { CreatureCombatStatistics } from "~/components/creature/creature-combat-statistics";
+import { CreatureHeading } from "./creature-heading";
+import type { Creature } from "~/types/creature";
 
-type CreatureCardProps = {
-  /** Fill out with specific creature types */
-  [key: string]: any;
-};
-
-export const CreatureCard = ({ creature }: CreatureCardProps) => {
+export const CreatureCard = ({ creature }: { creature: Creature }) => {
   const {
     name,
     alignment,
-    challenge_rating: challengeRating,
-    proficiency_bonus: proficiencyBonus,
+    challengeRating,
+    proficiencyBonus,
     strength,
     dexterity,
     constitution,
     wisdom,
     intelligence,
     charisma,
-    damage_immunities: damageImmunities,
-    damage_vulnerabilities: damageVulnerabilities,
-    hit_dice: hitDice,
-    hit_points: hitPoints,
+    damageImmunities,
+    damageVulnerabilities,
+    hitDice,
+    hitPoints,
     languages,
     size,
-    subtype,
     type,
     xp,
     image,
@@ -35,38 +34,22 @@ export const CreatureCard = ({ creature }: CreatureCardProps) => {
         component="section"
         sx={{ p: 2, display: "flex", flexDirection: "column", gap: 2 }}
       >
-        <Box display="flex" justifyContent="space-between" alignItems="center">
-          <Typography variant="h2">{name}</Typography>
-          <Typography variant="h3">CR: {challengeRating}</Typography>
-        </Box>
+        <CreatureHeading {...creature} />
         <Divider />
         {/* STATS - Attributes, Skills, Immunities, Vulnerabilities, Languages, Experience, HP, AC, Type, Species */}
-        <Box display="flex" justifyContent="space-between" alignItems="center">
-          <Box display="flex" flexDirection="column" alignItems="center">
-            <Typography variant="body1">Strength</Typography>
-            <Typography variant="h4">{strength}</Typography>
-          </Box>
-          <Box display="flex" flexDirection="column" alignItems="center">
-            <Typography variant="body1">Dexterity</Typography>
-            <Typography variant="h4">{dexterity}</Typography>
-          </Box>
-          <Box display="flex" flexDirection="column" alignItems="center">
-            <Typography variant="body1">Constitution</Typography>
-            <Typography variant="h4">{constitution}</Typography>
-          </Box>
-          <Box display="flex" flexDirection="column" alignItems="center">
-            <Typography variant="body1">Wisdom</Typography>
-            <Typography variant="h4">{wisdom}</Typography>
-          </Box>
-          <Box display="flex" flexDirection="column" alignItems="center">
-            <Typography variant="body1">Intelligence</Typography>
-            <Typography variant="h4">{intelligence}</Typography>
-          </Box>
-          <Box display="flex" flexDirection="column" alignItems="center">
-            <Typography variant="body1">Charisma</Typography>
-            <Typography variant="h4">{charisma}</Typography>
-          </Box>
-        </Box>
+        <Grid container>
+          <Grid size={6}>
+            <CreatureProficiencies {...creature} />
+          </Grid>
+          <Grid size={6}>
+            <Box display="flex" flexDirection="column" gap={2}>
+              <CreatureAttributes {...creature} />
+              <Divider />
+              <CreatureCombatStatistics {...creature} />
+            </Box>
+          </Grid>
+        </Grid>
+
         {/* TRAITS - Passive Bonuses / Abilities */}
 
         {/* ACTIONS - Regular Actions */}

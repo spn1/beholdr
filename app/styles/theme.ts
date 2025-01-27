@@ -1,6 +1,7 @@
 import { createTheme } from "@mui/material";
 
 const commonTheme = {
+  cssVariables: true,
   typography: {
     fontFamily: [
       "-apple-system",
@@ -22,18 +23,11 @@ export const darkTheme = createTheme({
   palette: {
     mode: "dark",
     primary: {
-      main: "#2ec4b6",
+      main: "#F5CB5C",
     },
     secondary: {
-      main: "#ff9f1c",
+      main: "#EF8354",
     },
-    background: {
-      default: "#121212",
-      paper: "#121212",
-    },
-  },
-  colorSchemes: {
-    dark: true,
   },
 });
 
@@ -42,17 +36,19 @@ export const lightTheme = createTheme({
   palette: {
     mode: "light",
     primary: {
-      main: "#578E7E",
+      main: "#B91C1C",
     },
     secondary: {
-      main: "#ff914c",
-    },
-    background: {
-      default: "#FFFAEC",
-      paper: "#F5ECD5",
+      main: "#FDE047",
     },
     text: {
-      primary: "#3D3D3D",
+      primary: "#27272A",
+      secondary: "#27272A",
+      disabled: "#27272A",
+    },
+    background: {
+      default: "#E7E5E4",
+      paper: "#EEEEEE",
     },
   },
 });

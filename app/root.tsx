@@ -6,6 +6,7 @@ import {
   Scripts,
   ScrollRestoration,
 } from "react-router";
+import { Box } from "@mui/material";
 
 import type { Route } from "./+types/root";
 import stylesheet from "./styles/app.css?url";
@@ -69,9 +70,13 @@ export function HydrateFallback() {
 
 export default function App() {
   return (
-    <>
+    <Box
+      sx={{
+        backgroundImage: "var(--background-texture)",
+      }}
+    >
       <Outlet />
-    </>
+    </Box>
   );
 }
 

@@ -1,4 +1,4 @@
-import { Paper, Box, Typography, Divider } from "@mui/material";
+import camelize from "camelize";
 import { useLoaderData } from "react-router";
 import type { Route } from "./+types/creature";
 
@@ -28,7 +28,7 @@ export async function clientLoader({ params }: Route.LoaderArgs) {
     throw new Response(" Error", { status });
   }
 
-  return { creature: monster };
+  return { creature: camelize(monster) };
 }
 
 /**

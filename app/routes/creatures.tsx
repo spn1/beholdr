@@ -1,16 +1,8 @@
-import { useRef, useEffect, useMemo } from "react";
-import { Box, Typography, TextField, LinearProgress } from "@mui/material";
-import {
-  Form,
-  useLoaderData,
-  useNavigation,
-  useSubmit,
-  Outlet,
-} from "react-router";
-import type { GridColDef } from "@mui/x-data-grid";
+import { useRef, useEffect } from "react";
+import { Box, Typography } from "@mui/material";
+import { useLoaderData, useNavigation, useSubmit } from "react-router";
 import type { Route } from "./+types/creatures";
 
-import { DataTable } from "~/components/shared/data-table";
 import { fetchData } from "~/services/dnd-5e-service";
 import { getCreaturesQuery } from "~/graphql/creatures";
 import { CreatureTable } from "~/components/creatures/creature-table";
@@ -79,40 +71,10 @@ export default () => {
           submit={submit}
           defaultValue={q || ""}
         />
-        {/* <Form
-          id="search-form"
-          role="search"
-          className="w-full"
-          onSubmit={(event) => submit(event.currentTarget)}
-        >
-          <TextField
-            id="q"
-            name="q"
-            label="Search"
-            type="search"
-            variant="filled"
-            disabled={searching}
-            defaultValue={q || ""}
-            ref={searchInputRef}
-            fullWidth
-          />
-          <LinearProgress
-            aria-hidden
-            sx={{ display: searching ? "block" : "none" }}
-            id="loading-bar"
-          />
-        </Form> */}
       </Box>
-      <CreatureTable creatures={creatures} searching={searching} />
-      {/* <Box component="section">
-        <Box width={1}>
-          <DataTable
-            rows={rows}
-            columns={CREATURE_COLUMNS}
-            loading={searching}
-          />
-        </Box>
-      </Box> */}
+      <Box component="section">
+        <CreatureTable creatures={creatures} searching={searching} />
+      </Box>
     </Box>
   );
 };
