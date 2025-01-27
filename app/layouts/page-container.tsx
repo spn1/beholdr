@@ -27,7 +27,7 @@ export default function PageContainer() {
         <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
           {/* <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}> */}
           <Link
-            color="background.default"
+            color="inherit"
             component={RouterLink}
             underline="none"
             to="/"
