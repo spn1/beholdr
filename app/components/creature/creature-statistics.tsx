@@ -17,6 +17,7 @@ export const CreatureStatistics = (creature: Creature) => {
     type,
     alignment,
     languages,
+    speed,
   } = creature;
   return (
     <Grid container>
@@ -28,6 +29,7 @@ export const CreatureStatistics = (creature: Creature) => {
         <CreatureStatList name="Damage Immunities" list={damageImmunities} />
         <CreatureStatList name="Damage Resistances" list={damageResistances} />
         <CreatureStatKeyValueList name="Senses" stats={senses} />
+        <CreatureStatKeyValueList name="Speed" stats={speed} />
         <CreatureStatList name="Languages" list={[languages]} />
       </Grid>
       <Grid size={6}>

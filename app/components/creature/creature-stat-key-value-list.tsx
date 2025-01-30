@@ -20,7 +20,7 @@ export const CreatureStatKeyValueList = ({
       </Typography>
       <Typography variant="body2">
         {Object.entries(stats)
-          .map(([key, value]) => value && `${capitalize(key)}: ${value}`)
+          .map(([key, value]) => value && `${capitalize(key)} ${value}`)
           .filter((text: string) => text)
           .join(", ")}
       </Typography>

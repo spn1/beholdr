@@ -4,28 +4,6 @@ import type { Creature } from "~/types/creature";
 import { CreatureStatistics } from "./creature-statistics";
 
 export const CreatureCard = ({ creature }: { creature: Creature }) => {
-  const {
-    name,
-    alignment,
-    challengeRating,
-    proficiencyBonus,
-    strength,
-    dexterity,
-    constitution,
-    wisdom,
-    intelligence,
-    charisma,
-    damageImmunities,
-    damageVulnerabilities,
-    hitDice,
-    hitPoints,
-    languages,
-    size,
-    type,
-    xp,
-    image,
-  } = creature;
-
   console.log(`🚨 [creature-card.tsx] creature: `, creature);
 
   return (
