@@ -1,6 +1,6 @@
 import { Box, Typography, Grid2 as Grid, Divider } from "@mui/material";
 import type { Creature } from "~/types/creature";
-import { CreatureCombatStatistics } from "./creature-combat-statistics";
+import { CreatureCombatAttributes } from "./creature-combat-attributes";
 
 export const CreatureAttributes = (creature: Creature) => {
   const { strength, dexterity, constitution, wisdom, intelligence, charisma } =

@@ -6,7 +6,7 @@ import {
   getAttributeModifier,
 } from "~/utils/creature-utils";
 
-export const CreatureCombatStatistics = ({
+export const CreatureCombatAttributes = ({
   armorClass,
   hitPoints,
   dexterity,

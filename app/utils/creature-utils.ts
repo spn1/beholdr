@@ -1,4 +1,4 @@
-import type { ArmorClass } from "~/types/creature";
+import type { ArmorClass, CreatureProficiency } from "~/types/creature";
 
 const NATURAL_ARMOR_CLASS_TYPE = "natural";
 
@@ -8,3 +8,7 @@ export const getNaturalArmorClass = (armorClass: ArmorClass[]) =>
 export const getAttributeModifier = (attribute: number) => {
   return (attribute - 10) / 2;
 };
+
+export const filterSavingThrows = (proficiencies: CreatureProficiency[]): CreatureProficiency[] => {
+  return proficiencies.filter(({ proficiency: { name } }) => !name.includes("Saving Throw: "));
+}

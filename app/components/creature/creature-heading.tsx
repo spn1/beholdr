@@ -10,14 +10,26 @@ export const CreatureHeading = ({
     <Box
       display="flex"
       flexDirection="row"
-      justifyContent="space-between"
       alignItems="center"
+      justifyContent="space-between"
     >
-      <Typography variant="h2">{name}</Typography>
-      <Box display="flex" flexDirection="row" gap={4}>
-        <Typography variant="h3">PB: +{proficiencyBonus}</Typography>
-        <Typography variant="h3">CR: {challengeRating}</Typography>
+      <Box display="flex" flexDirection="row" alignItems="center" gap={4}>
+        <Typography variant="h2">{name}</Typography>
+        <Typography
+          variant="h3"
+          sx={{
+            borderWidth: "2px",
+            borderRadius: "50%",
+            borderStyle: "solid",
+            borderColor: "primary.main",
+            aspectRatio: 1,
+            p: 0.5,
+          }}
+        >
+          +{proficiencyBonus}
+        </Typography>
       </Box>
+      <Typography variant="h3">CR: {challengeRating}</Typography>
     </Box>
   );
 };

@@ -1,9 +1,7 @@
 import { Box, Typography, Paper, Divider, Grid2 as Grid } from "@mui/material";
-import { CreatureAttributes } from "./creature-attributes";
-import { CreatureProficiencies } from "./creature-proficiencies";
-import { CreatureCombatStatistics } from "~/components/creature/creature-combat-statistics";
 import { CreatureHeading } from "./creature-heading";
 import type { Creature } from "~/types/creature";
+import { CreatureStatistics } from "./creature-statistics";
 
 export const CreatureCard = ({ creature }: { creature: Creature }) => {
   const {
@@ -28,6 +26,8 @@ export const CreatureCard = ({ creature }: { creature: Creature }) => {
     image,
   } = creature;
 
+  console.log(`🚨 [creature-card.tsx] creature: `, creature);
+
   return (
     <Box component="main" display="flex" gap={2} p={2} flexDirection="column">
       <Paper
@@ -37,18 +37,7 @@ export const CreatureCard = ({ creature }: { creature: Creature }) => {
         <CreatureHeading {...creature} />
         <Divider />
         {/* STATS - Attributes, Skills, Immunities, Vulnerabilities, Languages, Experience, HP, AC, Type, Species */}
-        <Grid container>
-          <Grid size={6}>
-            <CreatureProficiencies {...creature} />
-          </Grid>
-          <Grid size={6}>
-            <Box display="flex" flexDirection="column" gap={2}>
-              <CreatureAttributes {...creature} />
-              <Divider />
-              <CreatureCombatStatistics {...creature} />
-            </Box>
-          </Grid>
-        </Grid>
+        <CreatureStatistics {...creature} />
 
         {/* TRAITS - Passive Bonuses / Abilities */}
 
