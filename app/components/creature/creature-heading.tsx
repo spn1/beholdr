@@ -16,20 +16,20 @@ export const CreatureHeading = ({
       <Box display="flex" flexDirection="row" alignItems="center" gap={4}>
         <Typography variant="h2">{name}</Typography>
         <Typography
-          variant="h3"
+          variant="h5"
           sx={{
             borderWidth: "2px",
             borderRadius: "50%",
             borderStyle: "solid",
             borderColor: "primary.main",
-            aspectRatio: 1,
-            p: 0.5,
+            width: "50px",
+            p: 1,
           }}
         >
           +{proficiencyBonus}
         </Typography>
       </Box>
-      <Typography variant="h3">CR: {challengeRating}</Typography>
+      <Typography variant="h5">CR: {challengeRating}</Typography>
     </Box>
   );
 };
