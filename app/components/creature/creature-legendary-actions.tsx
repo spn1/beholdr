@@ -2,8 +2,10 @@ import { Box, Typography } from "@mui/material";
 
 import type { Creature } from "~/types/creature";
 
-export const CreatureLegendaryActions = ({ legendaryActions }: Creature) => {
-  if (!legendaryActions.length) return null;
+export const CreatureLegendaryActions = ({
+  legendaryActions = [],
+}: Creature) => {
+  if (!legendaryActions?.length) return null;
   return (
     <Box component="section">
       <Typography variant="h5" color="primary">

@@ -1,6 +1,8 @@
-import { Box, Typography, Paper, Divider, Grid2 as Grid } from "@mui/material";
-import { CreatureHeading } from "./creature-heading";
+import { Box, Paper, Divider } from "@mui/material";
+import { Masonry } from "@mui/lab";
+
 import type { Creature } from "~/types/creature";
+import { CreatureHeading } from "./creature-heading";
 import { CreatureStatistics } from "./creature-statistics";
 import { CreatureTraits } from "./creature-traits";
 import { CreatureActions } from "./creature-actions";
@@ -21,27 +23,16 @@ export const CreatureCard = ({ creature }: { creature: Creature }) => {
         <CreatureStatistics {...creature} />
         <Divider />
 
-        <Grid
-          container
-          gridTemplateColumns="1fr 1fr 1fr"
-          gridAutoFlow="column dense"
-          spacing={2}
-        >
+        <Masonry columns={{ md: 2, xs: 1 }} spacing={2}>
           {/* ACTIONS - Regular Actions */}
-          <Grid>
-            <CreatureActions {...creature} />
-          </Grid>
+          <CreatureActions {...creature} />
 
           {/* Traits - Passive Bonuses / Abilities  */}
-          <Grid>
-            <CreatureTraits {...creature} />
-          </Grid>
+          <CreatureTraits {...creature} />
 
           {/* LEGENDARY ACTIONS - Legendary Actions */}
-          <Grid>
-            <CreatureLegendaryActions {...creature} />
-          </Grid>
-        </Grid>
+          <CreatureLegendaryActions {...creature} />
+        </Masonry>
       </Paper>
     </Box>
   );

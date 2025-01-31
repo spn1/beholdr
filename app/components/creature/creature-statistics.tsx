@@ -11,8 +11,10 @@ import { CreatureStatKeyValueList } from "./creature-stat-key-value-list";
 export const CreatureStatistics = (creature: Creature) => {
   const {
     senses,
+    damageVulnerabilities,
     damageImmunities,
     damageResistances,
+    conditionImmunities,
     size,
     type,
     alignment,
@@ -26,8 +28,16 @@ export const CreatureStatistics = (creature: Creature) => {
           {capitalize(size)} {capitalize(type)}, {capitalize(alignment)}
         </Typography>
         <CreatureProficiencies {...creature} />
-        <CreatureStatList name="Damage Immunities" list={damageImmunities} />
+        <CreatureStatList
+          name="Damage Vulnerabilities"
+          list={damageVulnerabilities}
+        />
         <CreatureStatList name="Damage Resistances" list={damageResistances} />
+        <CreatureStatList name="Damage Immunities" list={damageImmunities} />
+        <CreatureStatList
+          name="Condition Immunities"
+          list={conditionImmunities.map(({ name }) => name)}
+        />
         <CreatureStatKeyValueList name="Senses" stats={senses} />
         <CreatureStatKeyValueList name="Speed" stats={speed} />
         <CreatureStatList name="Languages" list={[languages]} />

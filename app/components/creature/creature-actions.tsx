@@ -3,7 +3,7 @@ import { Box, Typography } from "@mui/material";
 import type { Creature } from "~/types/creature";
 
 export const CreatureActions = ({ actions }: Creature) => {
-  if (!actions.length) return null;
+  if (!actions?.length) return null;
   return (
     <Box component="section">
       <Typography variant="h5" color="primary">
