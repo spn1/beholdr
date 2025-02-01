@@ -1,58 +1,21 @@
-import {
-  Container,
-  ThemeProvider,
-  AppBar,
-  Toolbar,
-  Switch,
-  Typography,
-  Button,
-  Box,
-  CssBaseline,
-  Link,
-  SvgIcon,
-} from "@mui/material";
-import { Link as RouterLink, Outlet } from "react-router";
+import { Container, ThemeProvider, Box, CssBaseline } from "@mui/material";
+import { Outlet } from "react-router";
 
 import { useTheme } from "~/hooks/useTheme";
-import { ThemeSwitch } from "~/components/layout/theme-switcher";
-import { DiceIcon } from "~/components/shared/icons/dice";
+import { NavBar } from "./nav-bar";
+import { Breadcrumbs } from "./breadcrumbs";
 
-export default function PageContainer() {
+export default ({ matches }) => {
   const { theme, toggleTheme } = useTheme();
 
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline enableColorScheme />
-      <AppBar position="static">
-        <Toolbar sx={{ display: "flex", justifyContent: "space-between" }}>
-          {/* <Box sx={{ display: "flex", alignItems: "center", gap: 1 }}> */}
-          <Link
-            color="inherit"
-            component={RouterLink}
-            underline="none"
-            to="/"
-            sx={{ display: "flex", alignItems: "center", gap: 1 }}
-          >
-            <DiceIcon />
-            <Typography variant="h6" component="span">
-              Beholdr
-            </Typography>
-          </Link>
-          {/* </Box> */}
-          <Box>
-            <ThemeSwitch
-              onChange={toggleTheme}
-              checked={theme.palette.mode === "dark"}
-            />
-            {/* <Button color="inherit">Login</Button> */}
-          </Box>
-        </Toolbar>
-      </AppBar>
+      <NavBar theme={theme} toggleTheme={toggleTheme} />
       <Container maxWidth="lg">
-        <Box>
-          <Outlet />
-        </Box>
+        <Breadcrumbs matches={matches} />
+        <Outlet />
       </Container>
     </ThemeProvider>
   );
-}
+};
