@@ -20,7 +20,7 @@ export function meta({}: Route.MetaArgs) {
  * @param param0 Loader arguments
  * @returns The data from the API call and the query
  */
-export const loader = async ({ request }: Route.LoaderArgs) => {
+export const clientLoader = async ({ request }: Route.LoaderArgs) => {
   const url = new URL(request.url);
   const q = url.searchParams.get("q");
   const query = getCreaturesQuery({ name: q });

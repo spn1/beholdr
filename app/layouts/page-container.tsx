@@ -1,11 +1,11 @@
-import { Container, ThemeProvider, Box, CssBaseline } from "@mui/material";
+import { Container, ThemeProvider, CssBaseline } from "@mui/material";
 import { Outlet } from "react-router";
 
 import { useTheme } from "~/hooks/useTheme";
 import { NavBar } from "./nav-bar";
 import { Breadcrumbs } from "./breadcrumbs";
 
-export default ({ matches }) => {
+export default () => {
   const { theme, toggleTheme } = useTheme();
 
   return (
@@ -13,7 +13,7 @@ export default ({ matches }) => {
       <CssBaseline enableColorScheme />
       <NavBar theme={theme} toggleTheme={toggleTheme} />
       <Container maxWidth="lg">
-        <Breadcrumbs matches={matches} />
+        <Breadcrumbs />
         <Outlet />
       </Container>
     </ThemeProvider>

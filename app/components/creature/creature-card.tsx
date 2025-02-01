@@ -12,7 +12,7 @@ export const CreatureCard = ({ creature }: { creature: Creature }) => {
   console.log(`🚨 [creature-card.tsx] creature: `, creature);
 
   return (
-    <Box component="main" display="flex" gap={2} p={2} flexDirection="column">
+    <Box component="main" display="flex" gap={2} flexDirection="column">
       <Paper
         component="section"
         sx={{ p: 2, display: "flex", flexDirection: "column", gap: 2 }}
