@@ -1,6 +1,7 @@
 import { createTheme } from "@mui/material";
+import type { Theme, ThemeOptions } from "@mui/material";
 
-const commonTheme = {
+const commonTheme: ThemeOptions = {
   cssVariables: true,
   typography: {
     fontFamily: [
@@ -16,9 +17,36 @@ const commonTheme = {
       '"Segoe UI Symbol"',
     ].join(","),
   },
+  components: {
+    MuiDataGrid: {
+      styleOverrides: {
+        root: {
+          "& .MuiDataGrid-cell:hover": {
+            color: "primary.main",
+            cursor: "pointer",
+          },
+          "& .MuiDataGrid-cell:focus": {
+            outline: "none",
+          },
+          "& .MuiTablePagination-toolbar": {
+            height: 40,
+            minHeight: 40,
+          },
+          "& .MuiDataGrid-footerContainer": {
+            height: 40,
+            minHeight: 40,
+          },
+          a: {
+            color: "inherit",
+            textDecoration: "inherit",
+          },
+        },
+      },
+    },
+  },
 };
 
-export const darkTheme = createTheme({
+export const darkTheme: Theme = createTheme({
   ...commonTheme,
   palette: {
     mode: "dark",
@@ -31,7 +59,7 @@ export const darkTheme = createTheme({
   },
 });
 
-export const lightTheme = createTheme({
+export const lightTheme: Theme = createTheme({
   ...commonTheme,
   palette: {
     mode: "light",

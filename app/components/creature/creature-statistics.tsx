@@ -23,7 +23,7 @@ export const CreatureStatistics = (creature: Creature) => {
   } = creature;
   return (
     <Grid container>
-      <Grid size={6}>
+      <Grid size={{ md: 6, sm: 12 }} order={{ md: 1, sm: 2 }}>
         <Typography variant="subtitle1">
           {capitalize(size)} {capitalize(type)}, {capitalize(alignment)}
         </Typography>
@@ -42,7 +42,11 @@ export const CreatureStatistics = (creature: Creature) => {
         <CreatureStatKeyValueList name="Speed" stats={speed} />
         <CreatureStatList name="Languages" list={[languages]} />
       </Grid>
-      <Grid size={6}>
+      <Grid
+        size={{ md: 6, sm: 12 }}
+        order={{ md: 2, sm: 1 }}
+        pb={{ md: 0, sm: 2 }}
+      >
         <Box display="flex" flexDirection="column" gap={2}>
           <CreatureAttributes {...creature} />
           <Divider />

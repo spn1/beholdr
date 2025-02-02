@@ -34,7 +34,7 @@ const Crumb = ({
   totalCrumbs: number;
 }) =>
   index < totalCrumbs - 1 ? (
-    <Link component={RouterLink} to={crumb?.to}>
+    <Link component={RouterLink} to={crumb?.to} viewTransition>
       {capitalize(crumb?.name)}
     </Link>
   ) : (

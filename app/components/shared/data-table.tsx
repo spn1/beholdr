@@ -1,6 +1,6 @@
-import { Box, Avatar, Typography } from "@mui/material";
-import { DataGrid } from "@mui/x-data-grid";
-import { Link, useNavigate } from "react-router";
+import { DataGrid, GridRow } from "@mui/x-data-grid";
+import { NavLink as RouterLink } from "react-router";
+import { useNavigate } from "react-router";
 import type { GridRowsProp, GridColDef } from "@mui/x-data-grid";
 
 type DataTableProps = {
@@ -9,32 +9,14 @@ type DataTableProps = {
   loading: boolean;
 };
 
-type DataTableRowProps = {
-  name: string;
-  challenge_rating: number;
-};
-
-const DataTableRow = (props) => {
+const ReactRouterGridRow = (props) => {
   const {
-    row: { index, name, image },
-    rowHeight,
+    row: { id },
   } = props;
-  console.log("[data-table] props:", props);
   return (
-    <Box
-      sx={{
-        height: rowHeight,
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "space-between",
-        p: 1,
-      }}
-    >
-      <Link to={index}>
-        {/* <Avatar alt={name} src={`https://www.dnd5eapi.co${image}`} /> */}
-        <Typography>{name}</Typography>
-      </Link>
-    </Box>
+    <RouterLink to={id} viewTransition>
+      <GridRow {...props} />
+    </RouterLink>
   );
 };
 
@@ -45,19 +27,26 @@ export const DataTable = ({ rows, columns, loading }: DataTableProps) => {
       rows={rows}
       columns={columns}
       loading={loading}
+      slots={{
+        row: ReactRouterGridRow,
+      }}
       slotProps={{
         loadingOverlay: {
           variant: "skeleton",
           noRowsVariant: "skeleton",
         },
       }}
+      columnHeaderHeight={40}
+      rowHeight={35}
+      sx={{
+        boxShadow: 2,
+        border: 2,
+        borderColor: "primary.light",
+      }}
       initialState={{
-        pagination: { paginationModel: { pageSize: 10 } },
+        pagination: { paginationModel: { pageSize: 20 } },
       }}
       onRowClick={({ row }) => navigate(row?.index)}
-      // slots={{
-      //   row: (row) => <DataTableRow {...row} />,
-      // }}
       disableRowSelectionOnClick
     />
   );

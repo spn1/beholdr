@@ -9,8 +9,6 @@ import { CreatureActions } from "./creature-actions";
 import { CreatureLegendaryActions } from "./creature-legendary-actions";
 
 export const CreatureCard = ({ creature }: { creature: Creature }) => {
-  console.log(`🚨 [creature-card.tsx] creature: `, creature);
-
   return (
     <Box component="main" display="flex" gap={2} flexDirection="column">
       <Paper
@@ -19,18 +17,12 @@ export const CreatureCard = ({ creature }: { creature: Creature }) => {
       >
         <CreatureHeading {...creature} />
         <Divider />
-        {/* STATS - Attributes, Skills, Immunities, Vulnerabilities, Languages, Experience, HP, AC, Type, Species */}
         <CreatureStatistics {...creature} />
         <Divider />
 
         <Masonry columns={{ md: 2, xs: 1 }} spacing={2}>
-          {/* ACTIONS - Regular Actions */}
           <CreatureActions {...creature} />
-
-          {/* Traits - Passive Bonuses / Abilities  */}
           <CreatureTraits {...creature} />
-
-          {/* LEGENDARY ACTIONS - Legendary Actions */}
           <CreatureLegendaryActions {...creature} />
         </Masonry>
       </Paper>

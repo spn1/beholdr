@@ -19,10 +19,8 @@ export const CreatureTable = ({ creatures, searching }) => {
   }, [creatures]);
 
   return (
-    <Box component="section">
-      <Box width={1}>
-        <DataTable rows={rows} columns={CREATURE_COLUMNS} loading={searching} />
-      </Box>
+    <Box component="section" width={1} pb={2}>
+      <DataTable rows={rows} columns={CREATURE_COLUMNS} loading={searching} />
     </Box>
   );
 };

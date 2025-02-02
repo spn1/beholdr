@@ -9,7 +9,7 @@ export type CardProps = {
 
 export function Card({ to, children }: CardProps) {
   return (
-    <Link component={RouterLink} to={to} className="size-full">
+    <Link component={RouterLink} to={to} className="size-full" viewTransition>
       <MuiCard
         sx={{
           display: "flex",
