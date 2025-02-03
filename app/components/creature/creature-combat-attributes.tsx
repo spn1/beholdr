@@ -2,7 +2,7 @@ import { Grid2 as Grid, Box, Typography } from "@mui/material";
 
 import type { Creature } from "~/types/creature";
 import {
-  getNaturalArmorClass,
+  getHighestArmorClass,
   getAttributeModifier,
 } from "~/utils/creature-utils";
 
@@ -15,9 +15,7 @@ export const CreatureCombatAttributes = ({
     <Grid container spacing={2} width={1}>
       <Grid size={4} display="flex" flexDirection="column" alignItems="center">
         <Typography variant="body1">AC</Typography>
-        <Typography variant="h4">
-          {getNaturalArmorClass(armorClass)?.value}
-        </Typography>
+        <Typography variant="h4">{getHighestArmorClass(armorClass)}</Typography>
       </Grid>
       <Grid size={4} display="flex" flexDirection="column" alignItems="center">
         <Typography variant="body1">HP</Typography>

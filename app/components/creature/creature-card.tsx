@@ -9,6 +9,7 @@ import { CreatureActions } from "./creature-actions";
 import { CreatureLegendaryActions } from "./creature-legendary-actions";
 
 export const CreatureCard = ({ creature }: { creature: Creature }) => {
+  console.log(`🚨 [creature-card.tsx] creature: `, creature);
   return (
     <Box component="main" display="flex" gap={2} flexDirection="column">
       <Paper

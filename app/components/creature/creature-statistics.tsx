@@ -1,12 +1,25 @@
 import { Grid2 as Grid, Divider, Box, Typography } from "@mui/material";
 
-import type { Creature } from "~/types/creature";
-import { capitalize } from "~/utils/string-utils";
+import type { Creature, Sense } from "~/types/creature";
+import { capitalize, capitalizeAll } from "~/utils/string-utils";
 import { CreatureAttributes } from "./creature-attributes";
 import { CreatureProficiencies } from "./creature-proficiencies";
 import { CreatureCombatAttributes } from "./creature-combat-attributes";
 import { CreatureStatList } from "./creature-stat-list";
 import { CreatureStatKeyValueList } from "./creature-stat-key-value-list";
+
+/**
+ * Formats the senses object, to rename "passivePerception" to "Passive perception"
+ * @param senses An object containing the senses of the creature
+ * @returns An object containing the formatted senses
+ */
+const formatSenses = (senses: Record<string, string | number>) => {
+  const formattedSenses = {};
+  delete Object.assign(formattedSenses, senses, {
+    ["Passive perception"]: senses["passivePerception"],
+  })["passivePerception"];
+  return formattedSenses;
+};
 
 export const CreatureStatistics = (creature: Creature) => {
   const {
@@ -25,7 +38,7 @@ export const CreatureStatistics = (creature: Creature) => {
     <Grid container>
       <Grid size={{ md: 6, sm: 12 }} order={{ md: 1, sm: 2 }}>
         <Typography variant="subtitle1">
-          {capitalize(size)} {capitalize(type)}, {capitalize(alignment)}
+          {capitalizeAll(size)} {capitalizeAll(type)}, {capitalize(alignment)}
         </Typography>
         <CreatureProficiencies {...creature} />
         <CreatureStatList
@@ -38,7 +51,7 @@ export const CreatureStatistics = (creature: Creature) => {
           name="Condition Immunities"
           list={conditionImmunities.map(({ name }) => name)}
         />
-        <CreatureStatKeyValueList name="Senses" stats={senses} />
+        <CreatureStatKeyValueList name="Senses" stats={formatSenses(senses)} />
         <CreatureStatKeyValueList name="Speed" stats={speed} />
         <CreatureStatList name="Languages" list={[languages]} />
       </Grid>

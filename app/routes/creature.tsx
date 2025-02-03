@@ -35,7 +35,7 @@ export async function clientLoader({ params }: Route.LoaderArgs) {
  * Root page of /creatures/:index
  * Fetches the data and passes it to display component
  */
-export default ({ matches }) => {
+export default () => {
   const { creature } = useLoaderData();
 
   return <CreatureCard creature={creature} />;
