@@ -38,9 +38,8 @@ export default () => {
   const navigation = useNavigation();
   const submit = useSubmit();
   const searchInputRef = useRef<HTMLInputElement>(null);
-  const searching = navigation.location
-    ? new URLSearchParams(navigation.location.search).has("q")
-    : false;
+  const urlSearchParams = new URLSearchParams(navigation.location?.search);
+  const searching = urlSearchParams.has("q");
 
   useEffect(() => {
     if (searchInputRef?.current) {

@@ -3,10 +3,13 @@ import { NavLink as RouterLink } from "react-router";
 import { useNavigate } from "react-router";
 import type { GridRowsProp, GridColDef } from "@mui/x-data-grid";
 
+import { setSearchParam } from "~/utils/navigation-utils";
+
 type DataTableProps = {
   rows: GridRowsProp;
   columns: GridColDef[];
   loading: boolean;
+  page: string | null;
 };
 
 const ReactRouterGridRow = (props) => {
@@ -20,8 +23,10 @@ const ReactRouterGridRow = (props) => {
   );
 };
 
-export const DataTable = ({ rows, columns, loading }: DataTableProps) => {
+export const DataTable = ({ rows, columns, loading, page }: DataTableProps) => {
   const navigate = useNavigate();
+  const p = page ? parseInt(page, 10) : 0;
+
   return (
     <DataGrid
       rows={rows}
@@ -44,9 +49,12 @@ export const DataTable = ({ rows, columns, loading }: DataTableProps) => {
         borderColor: "primary.light",
       }}
       initialState={{
-        pagination: { paginationModel: { pageSize: 20 } },
+        pagination: { paginationModel: { pageSize: 20, page: p } },
       }}
       onRowClick={({ row }) => navigate(row?.index)}
+      onPaginationModelChange={({ page }) => {
+        setSearchParam("p", `${page}`);
+      }}
       disableRowSelectionOnClick
     />
   );
