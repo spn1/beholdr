@@ -52,7 +52,13 @@ export default () => {
       component="main"
       sx={{ display: "flex", flexDirection: "column", gap: 2 }}
     >
-      <Typography variant="h1">Creatures</Typography>
+      <Typography
+        // sx={{ md: { variant: "h1" }, sm: { variant: "h2" } }}
+        variant="h2"
+        component="h1"
+      >
+        Creatures
+      </Typography>
       <Box
         component="section"
         sx={{

@@ -22,8 +22,8 @@ export const CreatureCard = ({ creature }: { creature: Creature }) => {
         <Divider />
 
         <Masonry columns={{ md: 2, xs: 1 }} spacing={2}>
-          <CreatureActions {...creature} />
           <CreatureTraits {...creature} />
+          <CreatureActions {...creature} />
           <CreatureLegendaryActions {...creature} />
         </Masonry>
       </Paper>

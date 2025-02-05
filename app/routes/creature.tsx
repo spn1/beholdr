@@ -6,6 +6,13 @@ import { getCreatureQuery } from "~/graphql/creature";
 import { fetchData } from "~/services/dnd-5e-service";
 import { CreatureCard } from "~/components/creature/creature-card";
 
+export function meta({ data: { creature } = {} }: Route.MetaArgs) {
+  return [
+    { title: `Beholdr | ${creature?.name}` },
+    { name: "description", content: `${creature?.name} details` },
+  ];
+}
+
 /**
  * Loads the specified creature in the url param
  * @param loaderFunctionArgs

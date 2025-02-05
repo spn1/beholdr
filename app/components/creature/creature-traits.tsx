@@ -1,4 +1,4 @@
-import { Typography, Box } from "@mui/material";
+import { Typography, Box, Divider } from "@mui/material";
 
 import type { Creature } from "~/types/creature";
 

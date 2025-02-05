@@ -5,8 +5,12 @@ export const getCreaturesQuery = (variables: Variables): Query => ({
     monsters(name: $name) {
       index
       name
+      type
+      size
+      subtype
+      alignment
+      proficiency_bonus
       challenge_rating
-      image
     }
   }`,
   variables,
